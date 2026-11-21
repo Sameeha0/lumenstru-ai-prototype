@@ -106,6 +106,7 @@
   .statusbar { display: flex; justify-content: space-between; padding: 10px 24px 4px; font-size: 12px; font-weight: 700; color: var(--ink); }
   .screen { flex: 1; overflow-y: auto; padding: 8px 18px 24px; display: flex; flex-direction: column; gap: 16px;
     background-image: var(--screen-art); }
+  .screen > * { flex-shrink: 0; }   /* stop long screens squashing cards */
   .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); background: var(--card); border-top: 1px solid var(--line); padding-bottom: 6px; }
   .tabbar button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 11px; padding: 8px 0 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
   .tabbar button.on { color: var(--primary); font-weight: 700; }
@@ -201,6 +202,18 @@
 
   .breath { width: 170px; height: 170px; border-radius: 50%; margin: 12px auto; display: grid; place-items: center; border: 1.5px solid var(--primary); font-family: var(--serif); font-size: 18px; transition: transform 4s ease-in-out; }
   .breath.in { transform: scale(1.22); }
+  .disc { width: 124px; height: 124px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--bg); display: grid; place-items: center; margin: 4px auto 2px; }
+  .play { width: 54px; height: 54px; border-radius: 50%; border: 0; background: var(--primary); color: var(--on-primary); display: grid; place-items: center; cursor: pointer; }
+  .play svg { width: 22px; height: 22px; }
+  .progress { width: 100%; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  .progress span { display: block; height: 100%; background: var(--primary); }
+  .setting.picked b { color: var(--primary); }
+  .tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tool { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 4px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
+  .tool svg { width: 20px; height: 20px; color: var(--primary); }
+  .tool.on { border-color: var(--primary); color: var(--primary); font-weight: 700; }
+  .hero-time { font-family: var(--serif); font-size: 48px; line-height: 1.1; }
+  .btn:disabled { opacity: 0.4; cursor: default; }
 
   .chat { display: flex; flex-direction: column; gap: 8px; }
   .msg { max-width: 85%; padding: 9px 12px; border-radius: 16px; font-size: 14px; }
@@ -439,6 +452,8 @@ const ICON = {
   next: '<path d="M9 5l7 7-7 7"/>',
   heart: '<path d="M12 20s-7.5-4.6-9.4-9.3C1.4 7.2 3.6 4 7 4c2 0 3.7 1.1 5 3 1.3-1.9 3-3 5-3 3.4 0 5.6 3.2 4.4 6.7C19.5 15.4 12 20 12 20Z"/>',
   drop: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>',
+  play: '<path d="M8 5.5v13l10.5-6.5Z"/>',
+  pause: '<path d="M9 5.5v13M15 5.5v13"/>',
   login: '<path d="M10 17l5-5-5-5M4 12h11"/><path d="M20 4v16"/>',
 };
 function icon(name) {
@@ -767,17 +782,119 @@ function addTask(e) {
 }
 
 // ----- Calm Space -----
+// the same three 2-minute tracks as the app (royalty-free, Pixabay)
+const TRACKS = [
+  { title: "Focus Track", text: "Alpha-wave study music for deep focus", file: "assets/audio/calm1.mp3" },
+  { title: "Relaxation Track", text: "174 Hz relaxing tones for cramp comfort", file: "assets/audio/calm2.mp3" },
+  { title: "Sleep Track", text: "Soft music for sleep", file: "assets/audio/calm3.mp3" },
+];
+const STRETCHES = [
+  ["Neck tilt", "Tilt your head to one side, hold for 15 seconds, then swap."],
+  ["Side bend", "Reach one arm over your head and bend gently to the side."],
+  ["Shoulder rolls", "Roll your shoulders back slowly ten times."],
+  ["Cat-cow", "On hands and knees, round your back, then let it dip."],
+  ["Child's pose", "Kneel, sit back on your heels and stretch your arms forward."],
+];
+
+const player = new Audio();
+player.loop = true;
+let trackIndex = 0;
+let calmTool = "";       // "", "breathing", "meditation" or "stretch"
+let stretchStep = 0;
 let breathTimer = null;
+let meditationTimer = null;
+let meditationLeft = 300; // seconds
+
+// time like 1:05
+function mmss(sec) {
+  sec = Math.floor(sec || 0);
+  return Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
+}
+
 function calmScreen() {
+  const t = TRACKS[trackIndex];
+  const playing = !player.paused;
   return header("Calm Space", "A few quiet minutes") +
     '<section class="card center">' +
+      '<div class="disc"><span class="mascot ' + (playing ? "bob" : "") + '" style="--size:80px" aria-hidden="true"></span></div>' +
+      "<h3>" + t.title + '</h3><p class="small">' + t.text + "</p>" +
+      '<button class="play" aria-label="' + (playing ? "Pause" : "Play") + '" onclick="playTrack(' + trackIndex + ')">' + icon(playing ? "pause" : "play") + "</button>" +
+      '<div class="progress"><span id="calm-bar" style="width:' + (player.duration ? player.currentTime / player.duration * 100 : 0) + '%"></span></div>' +
+      '<div class="row between small" style="width:100%"><span id="calm-time" class="num">' + mmss(player.currentTime) + '</span><span class="num">2:00</span></div>' +
+    "</section>" +
+
+    '<span class="label">Quick relax</span>' +
+    '<div class="group">' + TRACKS.map((tr, i) =>
+      '<button class="setting' + (i === trackIndex ? " picked" : "") + '" onclick="playTrack(' + i + ')">' +
+        '<span class="grow"><b>' + tr.title + '</b><br><span class="small">' + tr.text + "</span></span>" +
+        '<span class="small num">2:00</span>' + icon(i === trackIndex && playing ? "pause" : "play") + "</button>"
+    ).join("") + "</div>" +
+
+    '<span class="label">Tools</span>' +
+    '<div class="tools">' +
+      toolButton("breathing", "drop", "Breathing") +
+      toolButton("meditation", "calm", "Meditation") +
+      toolButton("stretch", "heart", "Stretching") +
+    "</div>" +
+    toolPanel();
+}
+
+function toolButton(name, iconName, label) {
+  return '<button class="tool' + (calmTool === name ? " on" : "") + '" onclick="openTool(\'' + name + '\')">' + icon(iconName) + label + "</button>";
+}
+
+function toolPanel() {
+  if (calmTool === "breathing") {
+    return '<section class="card center">' +
       '<div class="breath" id="breath">Ready</div>' +
       '<p class="small">Breathe in for 4, hold for 4, out for 6.</p>' +
-      '<button class="btn" id="breath-btn" onclick="toggleBreathing()">' + (breathTimer ? "Stop" : "Start breathing") + "</button>" +
-    "</section>" +
-    '<section class="card"><h3>Gentle stretches</h3><p class="small">Neck tilt, side bend, shoulder rolls, cat-cow and child\'s pose, each with a moving guide.</p></section>' +
-    '<section class="card"><h3>Calm music</h3><p class="small">Rain, soft piano and ocean waves keep playing when you leave the app.</p></section>';
+      '<button class="btn" id="breath-btn" onclick="toggleBreathing()">' + (breathTimer ? "Stop" : "Start breathing") + "</button></section>";
+  }
+  if (calmTool === "meditation") {
+    return '<section class="card center"><div class="hero-time num" id="med-time">' + mmss(meditationLeft) + "</div>" +
+      '<p class="small">Sit comfortably and follow your breath until the timer ends.</p>' +
+      '<button class="btn" onclick="toggleMeditation()">' + (meditationTimer ? "Stop" : "Start 5 minutes") + "</button></section>";
+  }
+  if (calmTool === "stretch") {
+    const s = STRETCHES[stretchStep];
+    return '<section class="card"><span class="label">Stretch ' + (stretchStep + 1) + " of " + STRETCHES.length + "</span>" +
+      "<h3>" + s[0] + '</h3><p class="small">' + s[1] + "</p>" +
+      '<div class="row between"><button class="btn ghost small" onclick="moveStretch(-1)"' + (stretchStep === 0 ? " disabled" : "") + ">Back</button>" +
+      '<button class="btn small" onclick="moveStretch(1)">' + (stretchStep === STRETCHES.length - 1 ? "Done" : "Next") + "</button></div></section>";
+  }
+  return "";
 }
+
+function playTrack(i) {
+  if (i === trackIndex && !player.paused) {
+    player.pause();
+  } else {
+    if (i !== trackIndex || !player.src) {
+      trackIndex = i;
+      player.src = TRACKS[i].file;
+    }
+    player.play().catch(() => toast("Can't play", "Your browser blocked the audio. Tap play again."));
+  }
+  render();
+}
+
+// move the progress bar without drawing the whole screen again
+player.addEventListener("timeupdate", () => {
+  const bar = document.getElementById("calm-bar");
+  if (!bar || !player.duration) return;
+  bar.style.width = (player.currentTime / player.duration * 100) + "%";
+  document.getElementById("calm-time").textContent = mmss(player.currentTime);
+});
+player.addEventListener("play", () => { if (screen === "calm") render(); });
+player.addEventListener("pause", () => { if (screen === "calm") render(); });
+
+function openTool(name) {
+  calmTool = calmTool === name ? "" : name;
+  render();
+  const box = document.getElementById("screen");
+  box.scrollTop = box.scrollHeight;
+}
+
 function toggleBreathing() {
   if (breathTimer) {
     clearTimeout(breathTimer);
@@ -797,6 +914,41 @@ function toggleBreathing() {
   }
   document.getElementById("breath-btn").textContent = "Stop";
   next();
+}
+
+function toggleMeditation() {
+  if (meditationTimer) {
+    clearInterval(meditationTimer);
+    meditationTimer = null;
+    meditationLeft = 300;
+    render();
+    return;
+  }
+  meditationTimer = setInterval(() => {
+    meditationLeft--;
+    const label = document.getElementById("med-time");
+    if (label) label.textContent = mmss(meditationLeft);
+    if (meditationLeft <= 0) {
+      clearInterval(meditationTimer);
+      meditationTimer = null;
+      meditationLeft = 300;
+      toast("Meditation done", "Well done. Take that calm into your next task.");
+      if (screen === "calm") render();
+    }
+  }, 1000);
+  render();
+}
+
+function moveStretch(n) {
+  if (n > 0 && stretchStep === STRETCHES.length - 1) {
+    stretchStep = 0;
+    calmTool = "";
+    render();
+    toast("Stretches done", "Nice work. Your body will thank you.");
+    return;
+  }
+  stretchStep = Math.max(0, stretchStep + n);
+  render();
 }
 
 // ----- AI Assistant (rule-based, uses the user's own data) -----

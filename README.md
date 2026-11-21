@@ -16,5 +16,5 @@ Open `index.html` in a browser, or use the live link.
 ## Notes
 - All data is example data made relative to today's date.
 - Notification times you change are saved in your browser only.
-- Fonts (Lora, DM Sans) and the mascot pictures are in `assets/`.
+- Fonts (Lora, DM Sans), the mascot pictures and the three calm tracks (royalty-free, Pixabay) are in `assets/`.
 - The real app is a separate Android (Kotlin) project.
