@@ -1,4 +1,4 @@
-# Lumenstru AI – High-Fidelity Prototype
+# Lumenstru AI: High-Fidelity Prototype
 
 Clickable high-fidelity prototype of **Lumenstru AI**, a phase-aware study planner for Android
 (CS6008 Capstone Project). It shows the app inside a phone frame, with a navigator on the left
