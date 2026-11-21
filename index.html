@@ -146,64 +146,65 @@
   .ring-text { position: absolute; display: flex; flex-direction: column; align-items: center; text-align: center; }
   .ring-text .big { font-family: var(--serif); font-size: 44px; line-height: 1.05; }
   .ring-text .phase { font-family: var(--serif); font-style: italic; color: var(--rose-ink); }
-  .next-chip { align-self: center; display: inline-flex; gap: 6px; align-items: center; font-size: 12px; color: var(--primary); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; background: var(--bg); cursor: pointer; font-family: var(--sans); }
-  .next-chip svg { width: 14px; height: 14px; }
-
-  .quicklog { display: flex; align-items: center; gap: 14px; background: var(--primary); color: var(--on-primary); border: 0; border-radius: 999px; padding: 10px; text-align: left; font: inherit; cursor: pointer; }
-  .quicklog .plus { width: 44px; height: 44px; border-radius: 50%; background: rgba(251, 249, 246, 0.2); display: grid; place-items: center; font-size: 24px; }
+  .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .hero-actions svg { width: 15px; height: 15px; vertical-align: -2px; margin-right: 4px; }
 
   .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
   .tile { border: 0; background: transparent; color: var(--ink); display: flex; flex-direction: column; align-items: center; gap: 5px; font: inherit; font-size: 11px; cursor: pointer; padding: 2px 0; }
   .tile .circle { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; color: var(--primary); }
-  .tile.highlight .circle { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
   .tile svg { width: 19px; height: 19px; }
 
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+  .stats.two { grid-template-columns: 1fr 1fr; }
+  .stat strong { display: block; font-family: var(--serif); font-size: 20px; font-weight: 600; }
+  .stat small { font-size: 11px; color: var(--ink2); }
+
+  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; background: var(--card); border-radius: 999px; }
+  .tabs.two { grid-template-columns: 1fr 1fr; }
+  .tabs button { border: 0; background: transparent; color: var(--ink2); font: inherit; font-size: 13px; font-weight: 700; padding: 7px 0; border-radius: 999px; cursor: pointer; }
+  .tabs button.on { background: var(--bg); color: var(--primary); }
+
   .note { color: var(--rose-ink); font-size: 13px; }
+  .notice { display: flex; gap: 10px; align-items: flex-start; background: var(--card); border-left: 4px solid var(--rose); border-radius: 14px; padding: 12px 14px; }
+  .notice svg { width: 20px; height: 20px; color: var(--rose-ink); flex-shrink: 0; margin-top: 2px; }
   .task { display: flex; gap: 12px; align-items: center; padding: 8px 0; cursor: pointer; }
   .task input { width: 20px; height: 20px; accent-color: var(--primary); flex-shrink: 0; }
   .task.done .name { text-decoration: line-through; color: var(--muted); }
+  .badge { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; border-radius: 999px; padding: 2px 8px; border: 1px solid var(--primary); color: var(--primary); }
+  .badge.LOW { border-color: var(--line); color: var(--ink2); }
   .pill { font-size: 11px; border-radius: 999px; padding: 2px 9px; border: 1px solid var(--line); color: var(--ink2); white-space: nowrap; }
-  .pill.low { border-color: var(--rose); color: var(--rose-ink); }
-
-  .bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: end; height: 104px; }
-  .bar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; font-size: 11px; color: var(--ink2); }
-  .bar .fill { width: 100%; max-width: 24px; border-radius: 8px 8px 4px 4px; background: var(--primary); }
-  .bar .fill.low { background: var(--rose); }
 
   .chips { display: flex; gap: 6px; flex-wrap: wrap; }
   .chip { background: transparent; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; }
   .chip.on { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
   .chip.rose.on { background: var(--rose); color: #2A3229; border-color: var(--rose); }
+  .diff { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .diff .chip { font-family: var(--serif); font-size: 16px; padding: 8px 0; }
 
   .month { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
   .month .dow { font-size: 11px; color: var(--muted); }
   .day { aspect-ratio: 1; max-width: 100%; border-radius: 50%; background: transparent; color: var(--ink); font-family: var(--serif); font-size: 14px; display: grid; place-items: center; border: 1.5px solid transparent; cursor: pointer; }
   .day.period { background: var(--rose); color: #2A3229; }
-  .day.predicted { border: 1.5px dashed var(--rose); color: var(--rose-ink); }
-  .day.fertile { color: var(--primary); font-weight: 600; }
   .day.today { border-color: var(--primary); }
   .day.selected { outline: 2px solid var(--ink); outline-offset: 1px; }
+  .day:disabled { opacity: 0.3; cursor: default; }
   .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--ink2); }
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 4px; }
-
-
 
   .group { background: var(--card); border-radius: 18px; overflow: hidden; }
   .setting { display: flex; align-items: center; gap: 10px; padding: 12px 14px; width: 100%; border: 0; background: transparent; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
   .group .setting + .setting { border-top: 1px solid var(--line); }
   .setting svg { width: 18px; height: 18px; color: var(--primary); flex-shrink: 0; }
   .setting .chev { color: var(--muted); }
-  .setting input[type="time"], .setting select { width: auto; padding: 5px 8px; border-radius: 999px; color: var(--primary); font-weight: 700; }
 
   .switch { appearance: none; -webkit-appearance: none; width: 44px; height: 26px; border-radius: 99px; background: var(--line); position: relative; cursor: pointer; flex-shrink: 0; border: 0; padding: 0; transition: background 0.2s; }
   .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--bg); transition: left 0.2s; }
   .switch:checked { background: var(--rose); }
   .switch:checked::after { left: 21px; }
 
-  .breath { width: 170px; height: 170px; border-radius: 50%; margin: 12px auto; display: grid; place-items: center; border: 1.5px solid var(--primary); font-family: var(--serif); font-size: 18px; transition: transform 4s ease-in-out; }
-  .breath.in { transform: scale(1.22); }
   .disc { width: 124px; height: 124px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--bg); display: grid; place-items: center; margin: 4px auto 2px; }
-  .play { width: 54px; height: 54px; border-radius: 50%; border: 0; background: var(--primary); color: var(--on-primary); display: grid; place-items: center; cursor: pointer; }
+  .play { width: 54px; height: 54px; border-radius: 50%; border: 0; background: var(--primary); color: var(--on-primary); display: grid; place-items: center; cursor: pointer; flex-shrink: 0; }
+  .play.small { width: 44px; height: 44px; }
   .play svg { width: 22px; height: 22px; }
   .progress { width: 100%; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
   .progress span { display: block; height: 100%; background: var(--primary); }
@@ -211,9 +212,6 @@
   .tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .tool { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 4px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
   .tool svg { width: 20px; height: 20px; color: var(--primary); }
-  .tool.on { border-color: var(--primary); color: var(--primary); font-weight: 700; }
-  .hero-time { font-family: var(--serif); font-size: 48px; line-height: 1.1; }
-  .btn:disabled { opacity: 0.4; cursor: default; }
 
   .chat { display: flex; flex-direction: column; gap: 8px; }
   .msg { max-width: 85%; padding: 9px 12px; border-radius: 16px; font-size: 14px; }
@@ -224,8 +222,6 @@
   .sheet { background: var(--bg); width: 100%; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; padding: 12px 16px 22px; display: flex; flex-direction: column; gap: 12px; }
   .handle { width: 42px; height: 5px; border-radius: 5px; background: var(--line); margin: 0 auto 4px; }
   .toast { position: absolute; left: 10px; right: 10px; top: 34px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px 12px; z-index: 9; display: flex; gap: 10px; }
-  .toast .icon { width: 32px; height: 32px; border-radius: 10px; background: var(--primary); color: var(--on-primary); display: grid; place-items: center; font-family: var(--serif); font-weight: 600; flex-shrink: 0; }
-
 
   .mascot { display: inline-block; width: var(--size, 64px); height: var(--size, 64px); background: var(--mascot) center / contain no-repeat; flex-shrink: 0; }
   .mascot.bob { animation: bob 3s ease-in-out infinite; }
@@ -241,7 +237,7 @@
     .phone { border-width: 6px; border-radius: 34px; height: 740px; }
     .topbar { justify-content: center; }
   }
-  @media (prefers-reduced-motion: reduce) { .mascot.bob { animation: none; } .breath, .switch, .switch::after { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .mascot.bob { animation: none; } .switch, .switch::after { transition: none; } }
 </style>
 </head>
 <body>
@@ -261,7 +257,7 @@
       <p class="hint">Every screen is live. Tap around freely.</p>
       <div class="devnav" id="devnav"></div>
       <hr>
-      <p class="note">High-fidelity, clickable prototype of the Lumenstru AI Android app. Example data, made relative to today.</p>
+      <p class="note">High-fidelity, clickable prototype of Lumenstru AI with the features of the September design. Example data, made relative to today.</p>
     </aside>
 
     <main class="preview">
@@ -280,8 +276,6 @@
 <script>
 // ----- helpers -----
 const DAY = 86400000;
-
-// today at midnight so day maths is easy
 const TODAY = new Date();
 TODAY.setHours(0, 0, 0, 0);
 
@@ -290,28 +284,34 @@ function addDays(date, n) {
   d.setDate(d.getDate() + n);
   return d;
 }
+// dates are stored as "YYYY-MM-DD" text, so they are easy to compare
+function iso(d) {
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+function fromIso(s) {
+  const [y, m, d] = s.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+const TODAY_ISO = iso(TODAY);
 function daysBetween(a, b) {
-  return Math.round((b - a) / DAY);
+  return Math.round((fromIso(b) - fromIso(a)) / DAY);
 }
-function sameDay(a, b) {
-  return a.toDateString() === b.toDateString();
+function shortDate(s) {
+  return fromIso(s).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 }
-function shortDate(d) {
-  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+function longDate(s) {
+  return fromIso(s).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
 }
-function longDate(d) {
-  return d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
-}
-// "15:30" -> "3:30 PM"
-function timeLabel(t) {
-  const [h, m] = t.split(":").map(Number);
-  return (h % 12 || 12) + ":" + String(m).padStart(2, "0") + (h < 12 ? " AM" : " PM");
+function dueLabel(s) {
+  if (s === TODAY_ISO) return "Today";
+  if (s === iso(addDays(TODAY, 1))) return "Tomorrow";
+  return fromIso(s).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 }
 // escape user text so it can't break the HTML
 function esc(text) {
-  return String(text).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  return String(text).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
-// save settings in the browser (try/catch in case storage is blocked)
+// remember the chosen mode in the browser (try/catch in case storage is blocked)
 function load(key, fallback) {
   try { const v = localStorage.getItem("lumenstru_" + key); return v ? JSON.parse(v) : fallback; }
   catch (e) { return fallback; }
@@ -321,124 +321,85 @@ function save(key, value) {
 }
 
 // ----- example data (relative to today) -----
+let userName = "Sameeha";
+const USER_EMAIL = "sameeha@example.com";
 const PERIOD_LENGTH = 5;
-const USER_NAME = "Sameeha";
 
-// example periods: cycles of 29, 31, 28 and 30 days, last one started 12 days ago
-let periodStarts = [];
+// each period has a start, an end (null while it is still going) and the days that were logged
+let periods = [];
 (function makePeriods() {
-  const gaps = [29, 31, 28, 30];
-  let start = addDays(TODAY, -12);
-  periodStarts.unshift(start);
-  for (let i = gaps.length - 1; i >= 0; i--) {
-    start = addDays(start, -gaps[i]);
-    periodStarts.unshift(start);
+  const gaps = [29, 31, 28];            // past cycle lengths
+  let start = addDays(TODAY, -13);      // the last period started 13 days ago (cycle day 14)
+  const starts = [start];
+  for (const g of gaps) { start = addDays(start, -g); starts.unshift(start); }
+  for (const s of starts) {
+    periods.push({ start: iso(s), end: iso(addDays(s, PERIOD_LENGTH - 1)), logs: {} });
   }
+  periods[periods.length - 1].logs[periods[periods.length - 1].start] = { flow: "Medium", severity: "Mild", symptoms: ["Cramps"], mood: "Calm" };
 })();
 
+let nextTaskId = 8;
 let tasks = [
-  { name: "Finish OS lab report", due: 0, hard: true, done: false },
-  { name: "Read chapter 6 - Databases", due: 0, hard: false, done: true },
-  { name: "Revise for AI quiz", due: 3, hard: true, done: false },
-  { name: "Group meeting notes", due: 5, hard: false, done: false },
-  { name: "Dissertation draft - methods", due: 9, hard: true, done: false },
+  { id: 1, name: "Finish OS lab report", difficulty: 4, energy: "high", due: 0, done: false },
+  { id: 2, name: "Read chapter 6 - Databases", difficulty: 2, energy: "med", due: 0, done: true },
+  { id: 3, name: "Stretch and drink water", difficulty: 1, energy: "low", due: 0, done: true },
+  { id: 4, name: "Group meeting notes", difficulty: 2, energy: "med", due: 1, done: false },
+  { id: 5, name: "Revise for AI quiz", difficulty: 3, energy: "high", due: 3, done: false },
+  { id: 6, name: "Tidy my notes folder", difficulty: 1, energy: "low", due: 5, done: false },
+  { id: 7, name: "Dissertation draft - methods", difficulty: 5, energy: "high", due: 9, done: false },
 ];
+tasks.forEach(t => { t.due = iso(addDays(TODAY, t.due)); });
 
-// each notification has its own time
-let notifications = load("notifications", {
-  dnd: false,
-  hydration: { on: true, time: "10:00" },
-  rest: { on: true, time: "13:00" },
-  task: { on: true, time: "15:30" },
-  period: { on: true, time: "09:00" },
-  weekly: { on: true, time: "18:00" },
-});
+let reminders = [
+  { id: 1, title: "Hydration Reminder", time: "10:00 AM", text: "Time to drink water and stay hydrated.", action: "Got it", done: false },
+  { id: 2, title: "Rest Reminder", time: "1:00 PM", text: "Take a short break and rest your mind.", action: "Rest now", done: false },
+  { id: 3, title: "Task Reminder", time: "3:30 PM", text: "You have a pending task scheduled for today.", action: "View task", done: false },
+];
+let notif = { dnd: false, hydration: true, rest: true, taskAlerts: true };
 
-let resolved = [];  // reminders done today
-let chat = [{ me: false, text: "Hi " + USER_NAME + ". Ask me about your cycle, your energy or what to study today." }];
-let logDraft = { flow: "", pain: "", symptoms: [], mood: "" };
-
-// ----- period prediction -----
-// Linear regression trained in Python on open cycle data (Stanford and Najmabadi, 2023).
-// Inputs are the user's own last 3 cycle lengths.
-const MODEL = {
-  intercept: 6.8291,
-  last: 0.0495,
-  mean3: 0.7184,
-  spread3: -0.0252
-};
-
-function cycleLengths() {
-  const sorted = periodStarts.slice().sort((a, b) => a - b);
-  const lengths = [];
-  for (let i = 1; i < sorted.length; i++) {
-    const gap = daysBetween(sorted[i - 1], sorted[i]);
-    if (gap >= 15 && gap <= 60) lengths.push(gap); // under 15 / over 60 = a missed log
-  }
-  return lengths;
+// ----- cycle: day, phase and energy -----
+function sortedPeriods() {
+  return periods.slice().sort((a, b) => (a.start < b.start ? -1 : 1));
 }
-
-function predict() {
-  const sorted = periodStarts.slice().sort((a, b) => a - b);
-  const lastStart = sorted[sorted.length - 1];
-  const lengths = cycleLengths();
-  const result = { lastStart, lengths, cycleLength: 28, range: 3 };
-
-  if (lengths.length >= 3) {
-    const last3 = lengths.slice(-3);
-    const last = last3[2];
-    const mean3 = (last3[0] + last3[1] + last3[2]) / 3;
-    const spread3 = Math.max(...last3) - Math.min(...last3);
-    const predicted = MODEL.intercept + MODEL.last * last + MODEL.mean3 * mean3 + MODEL.spread3 * spread3;
-    result.cycleLength = Math.min(60, Math.max(15, Math.round(predicted)));
-    result.range = Math.max(2, Math.floor(spread3 / 2));
-  } else if (lengths.length > 0) {
-    result.cycleLength = Math.round(lengths.reduce((a, b) => a + b, 0) / lengths.length);
-  }
-
-  result.nextStart = addDays(lastStart, result.cycleLength);
-  if (result.nextStart <= TODAY) result.nextStart = addDays(TODAY, 1); // late: any day now
-  result.cycleDay = daysBetween(lastStart, TODAY) + 1;
-  return result;
+function activePeriod() {
+  return periods.find(p => !p.end) || null;
 }
-
-// phase and energy for a day (same rules as the Android app)
-function dayInfo(date) {
-  const p = predict();
-  const sorted = periodStarts.slice().sort((a, b) => a - b);
+// the period that covers a day (a period still going runs up to today)
+function periodOn(day) {
+  return periods.find(p => day >= p.start && day <= (p.end || TODAY_ISO)) || null;
+}
+// average gap between period starts, or 28 if there is no data yet
+function cycleLength() {
+  const list = sortedPeriods();
+  let total = 0, count = 0;
+  for (let i = 1; i < list.length; i++) {
+    const gap = daysBetween(list[i - 1].start, list[i].start);
+    if (gap >= 15 && gap <= 60) { total += gap; count++; }  // shorter or longer = a missed log
+  }
+  return count ? Math.round(total / count) : 28;
+}
+// phase and energy for any day
+function dayInfo(day) {
+  const len = cycleLength();
   let start = null;
-  for (const s of sorted) if (s <= date) start = s;
+  for (const p of sortedPeriods()) if (p.start <= day) start = p.start;
+  if (!start) return { phase: "", energy: "Steady", cycleDay: 0 };
+  let cycleDay = daysBetween(start, day) + 1;
+  if (day > TODAY_ISO) cycleDay = ((cycleDay - 1) % len) + 1;  // future days repeat the cycle
 
-  // future days: step forward by the predicted cycle length
-  if (date > TODAY) {
-    start = p.lastStart;
-    let next = p.nextStart;
-    while (next <= date) { start = next; next = addDays(next, p.cycleLength); }
-  }
-  if (!start) return { phase: null, energy: 2, period: false, predicted: false };
-
-  const cycleDay = daysBetween(start, date) + 1;
-  const inPeriod = cycleDay <= PERIOD_LENGTH;
-  const ovulation = p.cycleLength - 14;
+  const ovulation = len - 14;
   let phase = "Luteal";
-  if (inPeriod) phase = "Menstrual";
+  if (periodOn(day) || (day > TODAY_ISO && cycleDay <= PERIOD_LENGTH)) phase = "Menstrual";
   else if (cycleDay < ovulation - 1) phase = "Follicular";
   else if (cycleDay <= ovulation + 1) phase = "Ovulatory";
 
-  let energy = 2;
-  if (phase === "Follicular" || phase === "Ovulatory") energy = 3;
-  if (cycleDay <= 2) energy = 1;
-  if (phase === "Luteal" && p.cycleLength - cycleDay <= 2) energy = 1;
-
-  return {
-    phase, energy, cycleDay,
-    period: inPeriod && date <= TODAY,
-    predicted: inPeriod && date > TODAY,
-    fertile: phase === "Ovulatory",
-  };
+  let energy = "Steady";
+  if (phase === "Follicular" || phase === "Ovulatory") energy = "High";
+  if (phase === "Menstrual" || (phase === "Luteal" && len - cycleDay <= 2)) energy = "Low";
+  return { phase, energy, cycleDay };
 }
 
-// ----- icons (same set as the app) -----
+// ----- icons -----
 const ICON = {
   home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9v10a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1V9"/>',
   calendar: '<rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
@@ -452,15 +413,20 @@ const ICON = {
   next: '<path d="M9 5l7 7-7 7"/>',
   heart: '<path d="M12 20s-7.5-4.6-9.4-9.3C1.4 7.2 3.6 4 7 4c2 0 3.7 1.1 5 3 1.3-1.9 3-3 5-3 3.4 0 5.6 3.2 4.4 6.7C19.5 15.4 12 20 12 20Z"/>',
   drop: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>',
+  wind: '<path d="M3 8h11a2.5 2.5 0 1 0-2.4-3.2M3 13h14a2.5 2.5 0 1 1-2.4 3.2M3 18h8"/>',
   play: '<path d="M8 5.5v13l10.5-6.5Z"/>',
   pause: '<path d="M9 5.5v13M15 5.5v13"/>',
   login: '<path d="M10 17l5-5-5-5M4 12h11"/><path d="M20 4v16"/>',
+  edit: '<path d="M4 20 4.7 16.6 15.5 5.8a1.7 1.7 0 0 1 2.4 0l1.3 1.3a1.7 1.7 0 0 1 0 2.4L8.4 20.3 4 20Z"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+  help: '<circle cx="12" cy="12" r="8.5"/><path d="M9.5 9.3a2.5 2.5 0 1 1 3.7 2.2c-.9.5-1.2 1-1.2 1.9M12 16.6v.1"/>',
+  info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 8v.1"/>',
 };
 function icon(name) {
   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICON[name] + "</svg>";
 }
 
-// ----- Navigation -----
+// ----- navigation -----
 // [screen, icon, label]
 const NAV_ITEMS = [
   ["signin", "login", "Sign In"],
@@ -472,8 +438,8 @@ const NAV_ITEMS = [
   ["calm", "calm", "Calm Space"],
   ["ai", "spark", "AI Assistant"],
   ["reminders", "bell", "Reminders"],
-  ["notifications", "bell", "Notification Settings"],
   ["profile", "profile", "Profile"],
+  ["settings", "gear", "App Settings"],
 ];
 const TABS = [
   ["dashboard", "home", "Dashboard"],
@@ -482,16 +448,15 @@ const TABS = [
   ["calm", "calm", "Calm"],
   ["profile", "profile", "Profile"],
 ];
-// which bottom tab stays highlighted for inner screens
-const TAB_FOR = { logPeriod: "dashboard", addTask: "tasks", ai: "dashboard", reminders: "dashboard" };
+// which bottom tab stays lit on inner screens
+const TAB_FOR = { logPeriod: "dashboard", addTask: "tasks", ai: "dashboard", reminders: "dashboard", settings: "profile" };
 
 let screen = "dashboard";
-let selectedDate = new Date(TODAY);
-let calendarMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
 
 function go(name) {
   closeSheet();
-  if (name === "notifications") { openNotifications(); renderDevNav("notifications"); return; }
+  if (name === "logPeriod") startLog(TODAY_ISO);
+  if (name === "addTask") newTask = { name: "", difficulty: 3, energy: "high", due: "" };
   screen = name;
   render();
   document.getElementById("screen").scrollTop = 0;
@@ -500,17 +465,17 @@ function go(name) {
 function render() {
   const screens = {
     signin: signInScreen, dashboard: dashboardScreen, calendar: calendarScreen, logPeriod: logPeriodScreen,
-    tasks: tasksScreen, addTask: addTaskScreen, calm: calmScreen,
-    ai: aiScreen, reminders: remindersScreen, profile: profileScreen,
+    tasks: tasksScreen, addTask: addTaskScreen, calm: calmScreen, ai: aiScreen,
+    reminders: remindersScreen, profile: profileScreen, settings: settingsScreen,
   };
   document.getElementById("screen").innerHTML = screens[screen]();
   renderTabs();
-  renderDevNav(screen);
+  renderDevNav();
 }
 
-function renderDevNav(active) {
+function renderDevNav() {
   document.getElementById("devnav").innerHTML = NAV_ITEMS.map(item =>
-    '<button class="' + (item[0] === active ? "on" : "") + '" onclick="go(\'' + item[0] + '\')">' + icon(item[1]) +
+    '<button class="' + (item[0] === screen ? "on" : "") + '" onclick="go(\'' + item[0] + '\')">' + icon(item[1]) +
     "<span>" + item[2] + "</span></button>"
   ).join("");
 }
@@ -528,7 +493,8 @@ function header(title, subtitle, backTo) {
   return '<div class="header">' +
     (backTo ? '<button class="iconbtn" aria-label="Back" onclick="go(\'' + backTo + '\')">' + icon("back") + "</button>" : "") +
     '<div class="grow"><h1>' + title + '</h1><p class="sub">' + subtitle + "</p></div>" +
-    '<button class="iconbtn" aria-label="Reminders" onclick="go(\'reminders\')">' + icon("bell") + "</button></div>";
+    (backTo ? "" : '<button class="iconbtn" aria-label="Reminders" onclick="go(\'reminders\')">' + icon("bell") + "</button>") +
+    "</div>";
 }
 
 // ----- Sign In -----
@@ -536,35 +502,38 @@ function signInScreen() {
   return '<div class="card center" style="background:transparent;padding-top:20px">' +
       '<span class="mascot bob" style="--size:120px" aria-hidden="true"></span>' +
       "<h1>Welcome to Lumenstru</h1>" +
-      '<p class="sub">A study planner that works with your cycle, not against it.</p>' +
+      '<p class="sub">Your space to plan, rest and do well.</p>' +
     "</div>" +
-    '<form class="card" onsubmit="event.preventDefault(); go(\'dashboard\'); toast(\'Signed in\', \'Your data is saved to your account.\')">' +
-      '<label class="field" for="si-email">Email<input id="si-email" type="email" placeholder="you@example.com" value="sameeha@example.com"></label>' +
-      '<label class="field" for="si-pass">Password<input id="si-pass" type="password" placeholder="At least 6 characters" value="password1"></label>' +
-      '<button class="btn block" type="submit">Sign in</button>' +
-      '<div class="row between"><button type="button" class="link" onclick="toast(\'Forgot password\', \'A reset link is sent to your email.\')">Forgot password?</button>' +
-      '<button type="button" class="link" onclick="toast(\'Create account\', \'Email, password and confirm password.\')">Create account</button></div>' +
+    '<form class="card" onsubmit="signIn(event)">' +
+      '<label class="field" for="si-email">Email<input id="si-email" type="email" placeholder="you@example.com"></label>' +
+      '<label class="field" for="si-pass">Password<input id="si-pass" type="password" placeholder="Password"></label>' +
+      '<p class="note" id="si-warn"></p>' +
+      '<button class="btn block" type="submit">Log in</button>' +
     "</form>" +
     '<p class="small" style="text-align:center">or</p>' +
-    '<button class="btn ghost block" onclick="go(\'dashboard\')">Continue with Google</button>' +
-    '<button class="btn ghost block" onclick="go(\'dashboard\')">Skip, keep my data on this phone</button>';
+    '<button class="btn ghost block" onclick="toast(\'Google sign-in\', \'Coming soon.\')">Continue with Google</button>' +
+    '<p class="small" style="text-align:center">Don\'t have an account? <button class="link" onclick="toast(\'Sign up\', \'Coming soon.\')">Sign up</button></p>';
+}
+function signIn(e) {
+  e.preventDefault();
+  if (!document.getElementById("si-email").value.trim()) {
+    document.getElementById("si-warn").textContent = "Enter your email to continue.";
+    return;
+  }
+  go("dashboard");
+  toast("Welcome back, " + userName, "Here is your plan for today.");
 }
 
 // ----- Dashboard -----
-function cycleRing(p, info) {
+function cycleRing(info) {
+  const len = cycleLength();
   const r = 92, c = 2 * Math.PI * r;
-  const progress = Math.min(1, p.cycleDay / p.cycleLength);
-  const daysLeft = daysBetween(TODAY, p.nextStart);
-  const onPeriod = p.cycleDay <= PERIOD_LENGTH;
-  const label = onPeriod ? "PERIOD DAY" : "PERIOD IN";
-  const big = onPeriod ? p.cycleDay : daysLeft;
-  const unit = onPeriod ? "of about " + PERIOD_LENGTH : (daysLeft === 1 ? "day" : "days");
-  const periodPart = PERIOD_LENGTH / p.cycleLength;  // the rose arc for the period days
+  const progress = Math.min(1, info.cycleDay / len);
+  const periodPart = PERIOD_LENGTH / len;   // the rose arc is the period days
   const dotX = 105 + r * Math.sin(2 * Math.PI * progress);
   const dotY = 105 - r * Math.cos(2 * Math.PI * progress);
-
   return '<div class="ring-wrap">' +
-    '<svg width="210" height="210" viewBox="0 0 210 210" role="img" aria-label="Cycle day ' + p.cycleDay + " of " + p.cycleLength + '">' +
+    '<svg width="210" height="210" viewBox="0 0 210 210" role="img" aria-label="Cycle day ' + info.cycleDay + '">' +
       '<g transform="rotate(-90 105 105)">' +
         '<circle cx="105" cy="105" r="' + r + '" fill="none" stroke="var(--line)" stroke-width="5"/>' +
         '<circle cx="105" cy="105" r="' + r + '" fill="none" stroke="var(--rose)" stroke-width="5" stroke-dasharray="' + (c * periodPart) + " " + c + '" stroke-linecap="round"/>' +
@@ -572,213 +541,295 @@ function cycleRing(p, info) {
       "</g>" +
       '<circle cx="' + dotX + '" cy="' + dotY + '" r="6" fill="var(--primary)"/>' +
     "</svg>" +
-    '<div class="ring-text"><span class="label">' + label + '</span><span class="big num">' + big + '</span>' +
-      '<span class="small">' + unit + '</span><span class="phase">' + info.phase + "</span></div>" +
+    '<div class="ring-text"><span class="label">Cycle day</span><span class="big num">' + info.cycleDay + "</span>" +
+      '<span class="small">Estimated</span><span class="phase">' + info.phase + "</span></div>" +
   "</div>";
 }
 
-function dashboardScreen() {
-  const p = predict();
-  const info = dayInfo(TODAY);
-  const todaysTasks = tasks.filter(t => t.due === 0);
-
-  // 7-day study forecast
-  let bars = "";
-  for (let i = 0; i < 7; i++) {
-    const d = addDays(TODAY, i);
-    const e = dayInfo(d).energy;
-    bars += '<div class="bar"><span class="fill ' + (e === 1 ? "low" : "") + '" style="height:' + (e * 27) + 'px"></span>' +
-      (i === 0 ? "Today" : d.toLocaleDateString("en-GB", { weekday: "short" })) + "</div>";
-  }
-
-  return header("Hi, " + USER_NAME, "Current phase: " + info.phase) +
-    cycleRing(p, info) +
-    '<button class="next-chip" onclick="go(\'calendar\')">' + icon("calendar") +
-      "Next period " + shortDate(p.nextStart) + " · likely " + shortDate(addDays(p.nextStart, -p.range)) + "–" + shortDate(addDays(p.nextStart, p.range)) + "</button>" +
-    '<button class="quicklog" onclick="go(\'logPeriod\')"><span class="plus">+</span><span><b>Log today</b><br><span style="opacity:.8;font-size:13px">Flow, symptoms &amp; mood</span></span></button>' +
-
-    checkInCard() +
-
+function heroAndTiles(info) {
+  return cycleRing(info) +
+    '<div class="hero-actions">' +
+      '<button class="btn ghost small" onclick="go(\'calendar\')">' + icon("calendar") + "View Calendar</button>" +
+      '<button class="btn small" onclick="go(\'logPeriod\')">' + icon("drop") + "Log Period</button>" +
+    "</div>" +
     '<div class="tiles">' +
       '<button class="tile" onclick="go(\'tasks\')"><span class="circle">' + icon("tasks") + "</span>Tasks</button>" +
       '<button class="tile" onclick="go(\'addTask\')"><span class="circle">' + icon("plus") + "</span>Add Task</button>" +
       '<button class="tile" onclick="go(\'ai\')"><span class="circle">' + icon("spark") + "</span>Ask AI</button>" +
       '<button class="tile" onclick="go(\'reminders\')"><span class="circle">' + icon("bell") + "</span>Reminders</button>" +
-    "</div>" +
-
-    '<section class="card"><div class="row between"><h3>Study forecast</h3><span class="example">Rose = low energy</span></div>' +
-      '<div class="bars">' + bars + "</div>" +
-      '<p class="small">' + (info.energy === 3 ? "High energy today. A good day for your hardest task." : info.energy === 1 ? "A lower-energy day. Keep tasks light and rest well." : "A steady day. Take a 10-minute break after each hour.") + "</p>" +
-    "</section>" +
-
-    '<section class="card"><div class="row between"><h3>Today\'s tasks</h3><button class="btn ghost small" onclick="go(\'addTask\')">+ Add</button></div>' +
-      (todaysTasks.map(taskRow).join("") || '<p class="small">Nothing due today.</p>') +
-    "</section>";
+    "</div>";
 }
 
-// one-tap daily check-in
-let checkIn = "";
-function checkInCard() {
-  const replies = { Great: "Love that! A good day for your hardest task.", Okay: "Steady is good. Take a break each hour.", Low: "Thanks for telling me. Today is planned as a lighter day." };
-  return '<section class="card"><div class="row"><span class="mascot bob" style="--size:62px" aria-hidden="true"></span>' +
-    '<div class="grow"><h3>' + (checkIn ? replies[checkIn] : "How are you today?") + "</h3>" +
-    (checkIn ? '<p class="small">Checked in: ' + checkIn + "</p>" : '<p class="small">One tap to check in</p>') + "</div></div>" +
-    (checkIn ? "" : '<div class="chips">' + ["Great", "Okay", "Low"].map(m => '<button class="chip" onclick="doCheckIn(\'' + m + '\')">' + m + "</button>").join("") + "</div>") +
-  "</section>";
+let sortBy = "Priority";
+function sortTasks(list) {
+  if (sortBy === "Priority") return list.slice().sort((a, b) => b.difficulty - a.difficulty);
+  return list.slice().sort((a, b) => (a.due < b.due ? -1 : 1));
 }
-function doCheckIn(mood) {
-  checkIn = mood;
+// the task to do first: earliest due date, then the hardest one
+function focusTask() {
+  const open = tasks.filter(t => !t.done);
+  open.sort((a, b) => (a.due === b.due ? b.difficulty - a.difficulty : a.due < b.due ? -1 : 1));
+  return open[0];
+}
+function changeSort() {
+  sortBy = sortBy === "Priority" ? "Due date" : "Priority";
   render();
+}
+
+function dashboardScreen() {
+  const info = dayInfo(TODAY_ISO);
+  const done = tasks.filter(t => t.done).length;
+
+  // Lavender mode: a quieter dashboard with one focus task and no stats
+  if (isDark()) {
+    const focus = focusTask();
+    return header("Hi, " + userName, "Current phase: " + info.phase) +
+      heroAndTiles(info) +
+      '<span class="label">Today\'s focus</span>' +
+      '<section class="card">' + (focus ? taskRow(focus) : '<p class="small">All caught up.</p>') + "</section>" +
+      '<p class="small" style="text-align:center">Stats are hidden in Lavender Mode.</p>' +
+      miniPlayer(2, true);
+  }
+
+  const todays = sortTasks(tasks.filter(t => t.due === TODAY_ISO));
+  return header("Hi, " + userName, "Current phase: " + info.phase) +
+    heroAndTiles(info) +
+    '<section class="card"><span class="label">Today</span><div class="stats">' +
+      '<div class="stat"><strong>' + info.phase + "</strong><small>Phase</small></div>" +
+      '<div class="stat"><strong class="num">' + tasks.filter(t => !t.done).length + "</strong><small>Tasks due</small></div>" +
+      '<div class="stat"><strong class="num">' + Math.round(done / tasks.length * 100) + "%</strong><small>Focus score</small></div>" +
+    "</div></section>" +
+    '<section class="card"><div class="row between"><h3>Today\'s tasks</h3>' +
+      '<button class="btn ghost small" onclick="changeSort()">Sort: ' + sortBy + "</button></div>" +
+      (todays.map(taskRow).join("") || '<p class="small">Nothing due today.</p>') +
+    "</section>" +
+    '<div class="stats two">' +
+      '<div class="card stat"><strong class="num">7</strong><small>Day streak</small></div>' +
+      '<div class="card stat"><strong class="num">' + done + "</strong><small>Completed</small></div>" +
+    "</div>" +
+    miniPlayer(0, false);
+}
+
+// small player card on the Dashboard
+function miniPlayer(i, big) {
+  const playing = !player.paused && trackIndex === i;
+  return '<section class="card"><div class="row">' +
+    '<button class="play ' + (big ? "" : "small") + '" aria-label="' + (playing ? "Pause" : "Play") + '" onclick="playTrack(' + i + ')">' + icon(playing ? "pause" : "play") + "</button>" +
+    '<div class="grow" style="text-align:left"><b>' + TRACKS[i].title + '</b><p class="small">' + TRACKS[i].text + "</p></div>" +
+    "</div></section>";
 }
 
 function taskRow(t) {
-  const i = tasks.indexOf(t);
-  const dueDay = addDays(TODAY, t.due);
-  const low = dayInfo(dueDay).energy === 1;
-  return '<label class="task ' + (t.done ? "done" : "") + '"><input type="checkbox" ' + (t.done ? "checked" : "") + ' onchange="toggleTask(' + i + ')">' +
-    '<span class="grow name">' + esc(t.name) + "</span>" +
-    '<span class="pill ' + (low && t.hard ? "low" : "") + '">' + (t.due === 0 ? "Today" : shortDate(dueDay)) + (t.hard ? " · hard" : "") + "</span></label>";
+  const badge = t.energy === "high" ? "HIGH" : t.energy === "med" ? "MED" : "LOW";
+  return '<label class="task ' + (t.done ? "done" : "") + '"><input type="checkbox" ' + (t.done ? "checked" : "") + ' onchange="toggleTask(' + t.id + ')">' +
+    '<span class="grow"><span class="name">' + esc(t.name) + '</span><br><span class="small">' + dueLabel(t.due) + " · difficulty " + t.difficulty + "</span></span>" +
+    '<span class="badge ' + badge + '">' + badge + "</span></label>";
 }
-function toggleTask(i) {
-  tasks[i].done = !tasks[i].done;
+function toggleTask(id) {
+  const t = tasks.find(x => x.id === id);
+  t.done = !t.done;
   render();
+  if (t.done) toast("Task complete", "Nice work. One step closer.");
+}
+
+// ----- month grid (used by Calendar and Log Period) -----
+// pick = name of the function to call with the day, maxDay = last day that can be tapped
+function monthGrid(month, selected, pick, maxDay) {
+  const year = month.getFullYear(), m = month.getMonth();
+  const offset = (new Date(year, m, 1).getDay() + 6) % 7; // weeks start on Monday
+  const count = new Date(year, m + 1, 0).getDate();
+  let grid = ["M", "T", "W", "T", "F", "S", "S"].map(d => '<div class="dow">' + d + "</div>").join("");
+  for (let i = 0; i < offset; i++) grid += "<div></div>";
+  for (let d = 1; d <= count; d++) {
+    const day = iso(new Date(year, m, d));
+    let cls = "day num";
+    if (periodOn(day) && day <= TODAY_ISO) cls += " period";
+    if (day === TODAY_ISO) cls += " today";
+    if (day === selected) cls += " selected";
+    const off = maxDay && day > maxDay ? " disabled" : "";
+    grid += '<button class="' + cls + '"' + off + ' onclick="' + pick + "('" + day + "')\">" + d + "</button>";
+  }
+  return '<div class="month">' + grid + "</div>";
+}
+function monthNav(month, moveFn) {
+  return '<div class="row between"><button class="iconbtn" aria-label="Previous month" onclick="' + moveFn + '(-1)">' + icon("back") + "</button>" +
+    "<h2>" + month.toLocaleDateString("en-GB", { month: "long", year: "numeric" }) + "</h2>" +
+    '<button class="iconbtn" aria-label="Next month" onclick="' + moveFn + '(1)">' + icon("next") + "</button></div>";
 }
 
 // ----- Calendar -----
+let calMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
+let calDay = TODAY_ISO;
+
 function calendarScreen() {
-  const p = predict();
-  const year = calendarMonth.getFullYear(), month = calendarMonth.getMonth();
-  const first = new Date(year, month, 1);
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const offset = (first.getDay() + 6) % 7; // weeks start on Monday
-
-  let grid = ["M", "T", "W", "T", "F", "S", "S"].map(d => '<div class="dow">' + d + "</div>").join("");
-  for (let i = 0; i < offset; i++) grid += "<div></div>";
-  for (let d = 1; d <= daysInMonth; d++) {
-    const date = new Date(year, month, d);
-    const info = dayInfo(date);
-    let cls = "day";
-    if (info.period) cls += " period";
-    if (info.predicted) cls += " predicted";
-    if (info.fertile && !info.period && !info.predicted) cls += " fertile";
-    if (sameDay(date, TODAY)) cls += " today";
-    if (sameDay(date, selectedDate)) cls += " selected";
-    grid += '<button class="' + cls + ' num" onclick="selectDay(' + date.getTime() + ')">' + d + "</button>";
-  }
-
-  const sel = dayInfo(selectedDate);
-  const isStart = periodStarts.some(s => sameDay(s, selectedDate));
-
-  return header("Calendar", "Past and expected periods") +
-    '<div class="row between"><button class="iconbtn" aria-label="Previous month" onclick="moveMonth(-1)">' + icon("back") + "</button>" +
-      "<h2>" + first.toLocaleDateString("en-GB", { month: "long", year: "numeric" }) + "</h2>" +
-      '<button class="iconbtn" aria-label="Next month" onclick="moveMonth(1)">' + icon("next") + "</button></div>" +
-    '<div class="month">' + grid + "</div>" +
-    '<div class="legend"><span><i class="dot" style="background:var(--rose)"></i>Period</span>' +
-      '<span><i class="dot" style="border:1.5px dashed var(--rose)"></i>Predicted</span>' +
-      '<span><i class="dot" style="background:var(--primary)"></i>Fertile window</span></div>' +
-
-    '<section class="card"><span class="label">' + longDate(selectedDate) + "</span>" +
-      "<p>" + (sel.phase ? sel.phase + " phase · cycle day " + sel.cycleDay : "Before your first logged period") + "</p>" +
-      (selectedDate <= TODAY
-        ? '<button class="btn ' + (isStart ? "ghost" : "rose") + ' small" onclick="togglePeriodStart()">' + (isStart ? "Remove this period" : "Mark a period starting this day") + "</button>"
-        : '<p class="small">Future day. Predictions update when you log a new period.</p>') +
-    "</section>" +
-
-    '<section class="card"><h3>Next period</h3>' +
-      "<p>Around <b>" + shortDate(p.nextStart) + "</b>, most likely " + shortDate(addDays(p.nextStart, -p.range)) + "–" + shortDate(addDays(p.nextStart, p.range)) + ".</p>" +
-    "</section>";
+  const info = dayInfo(calDay);
+  const dayTasks = tasks.filter(t => t.due === calDay);
+  return header("Calendar", "Plan around your energy") +
+    '<section class="card">' + monthNav(calMonth, "moveCalMonth") + monthGrid(calMonth, calDay, "pickCalDay") +
+      '<div class="legend"><span><i class="dot" style="background:var(--rose)"></i>Period day</span>' +
+      '<span><i class="dot" style="border:1.5px solid var(--primary)"></i>Today</span></div></section>' +
+    '<span class="label">' + longDate(calDay) + " · " + info.energy + " energy day</span>" +
+    (periodOn(calDay) && calDay <= TODAY_ISO ? '<div class="notice">' + icon("drop") + '<div><b>Period day</b><p class="small">You were on your period on this day.</p></div></div>' : "") +
+    '<section class="card"><h3>Plan for this day</h3>' +
+      (dayTasks.map(taskRow).join("") || '<p class="small">Nothing planned.</p>') + "</section>" +
+    (calDay <= TODAY_ISO ? '<button class="btn block" onclick="logForDay()">Log period for this day</button>' : "");
 }
-
-function selectDay(ms) {
-  selectedDate = new Date(ms);
+function pickCalDay(day) {
+  calDay = day;
   render();
 }
-function moveMonth(n) {
-  calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + n, 1);
+function moveCalMonth(n) {
+  calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() + n, 1);
   render();
 }
-function togglePeriodStart() {
-  const i = periodStarts.findIndex(s => sameDay(s, selectedDate));
-  if (i >= 0) {
-    if (periodStarts.length === 1) { toast("Can't remove", "At least one period is needed for predictions."); return; }
-    periodStarts.splice(i, 1);
-  } else {
-    periodStarts.push(new Date(selectedDate));
-  }
-  const p = predict();
+function logForDay() {
+  go("logPeriod");
+  startLog(calDay);
   render();
-  toast("Prediction updated", "Next period around " + shortDate(p.nextStart) + ".");
 }
 
-// ----- Log Period -----
+// ----- Log Period (one day at a time) -----
+let log = {};   // the day being logged and its answers
+function startLog(day) {
+  const saved = periodOn(day) ? periodOn(day).logs[day] : null;
+  log = {
+    day: day,
+    month: new Date(fromIso(day).getFullYear(), fromIso(day).getMonth(), 1),
+    flow: saved ? saved.flow : "",
+    severity: saved ? saved.severity : "",
+    symptoms: saved ? saved.symptoms.slice() : [],
+    mood: saved ? saved.mood : "",
+    end: false,
+  };
+}
+function pickLogDay(day) {
+  startLog(day);
+  render();
+}
+function moveLogMonth(n) {
+  log.month = new Date(log.month.getFullYear(), log.month.getMonth() + n, 1);
+  render();
+}
 function chipGroup(field, options, multi) {
   return '<div class="chips">' + options.map(o => {
-    const on = multi ? logDraft[field].includes(o) : logDraft[field] === o;
-    return '<button class="chip rose ' + (on ? "on" : "") + '" onclick="pickLog(\'' + field + "', '" + o + "', " + multi + ')">' + o + "</button>";
+    const on = multi ? log[field].includes(o) : log[field] === o;
+    return '<button class="chip rose ' + (on ? "on" : "") + '" onclick="pickChip(\'' + field + "', '" + o + "', " + multi + ')">' + o + "</button>";
   }).join("") + "</div>";
 }
-function pickLog(field, value, multi) {
+function pickChip(field, value, multi) {
   if (multi) {
-    const list = logDraft[field];
-    const i = list.indexOf(value);
-    if (i >= 0) list.splice(i, 1); else list.push(value);
+    const i = log[field].indexOf(value);
+    if (i >= 0) log[field].splice(i, 1); else log[field].push(value);
   } else {
-    logDraft[field] = logDraft[field] === value ? "" : value;
+    log[field] = log[field] === value ? "" : value;
   }
   render();
 }
 
 function logPeriodScreen() {
-  const onPeriod = dayInfo(TODAY).period;
-  return header("Log Period", longDate(TODAY), "dashboard") +
-    '<section class="card"><span class="label">Flow</span>' + chipGroup("flow", ["Spotting", "Light", "Medium", "Heavy"], false) + "</section>" +
-    '<section class="card"><span class="label">Pain</span>' + chipGroup("pain", ["None", "Mild", "Moderate", "Severe"], false) +
-      (logDraft.pain === "Severe" ? '<p class="note">Today becomes a low-energy day and Lumenstru offers to move hard tasks.</p>' : "") + "</section>" +
-    '<section class="card"><span class="label">Symptoms</span>' + chipGroup("symptoms", ["Cramps", "Headache", "Bloating", "Tired", "Back pain", "Acne"], true) + "</section>" +
-    '<section class="card"><span class="label">Mood</span>' + chipGroup("mood", ["Calm", "Happy", "Low", "Anxious", "Irritable"], false) + "</section>" +
-    '<button class="btn block" onclick="saveLog()">' + (onPeriod ? "Save today's info" : "Save & start period today") + "</button>" +
-    '<button class="btn ghost block" onclick="go(\'calendar\')">Mark previous dates</button>';
+  const rec = periodOn(log.day);
+  const active = activePeriod();
+  const starting = !rec && !active;              // this day starts a new period
+  const canEnd = active && rec === active;       // a period is going, so it can end here
+  const saved = rec && rec.logs[log.day];
+
+  const status = starting
+    ? '<div class="notice">' + icon("drop") + '<div><b>No period in progress</b><p class="small">Saving this day will start a new period.</p></div></div>'
+    : '<div class="notice">' + icon("drop") + "<div><b>" + (rec && rec.end ? "Past period" : "Period in progress") + "</b>" +
+      '<p class="small">Started ' + shortDate((rec || active).start) + (rec && rec.end ? ", ended " + shortDate(rec.end) : "") + ". You are logging one day of it.</p></div></div>";
+
+  let label = log.day === TODAY_ISO ? "Save today's info" : "Save this day's info";
+  if (starting) label = "Save and start period";
+  if (canEnd && log.end) label = "Save and end period";
+
+  return header("Log Period", "Logging helps me plan with you", "dashboard") +
+    status +
+    '<section class="card"><div class="row between"><span class="label">Selected day</span>' +
+      (saved ? '<span class="pill">Saved</span>' : "") + "</div><h3>" + longDate(log.day) + "</h3>" +
+      monthNav(log.month, "moveLogMonth") + monthGrid(log.month, log.day, "pickLogDay", TODAY_ISO) +
+      '<p class="small">Tap any past day to fill in what you missed. Future days can\'t be logged.</p></section>' +
+    '<section class="card"><span class="label">Flow</span>' + chipGroup("flow", ["Light", "Medium", "Heavy"], false) + "</section>" +
+    '<section class="card"><span class="label">Symptom severity</span>' + chipGroup("severity", ["Mild", "Moderate", "Severe"], false) + "</section>" +
+    '<section class="card"><span class="label">Symptoms</span>' + chipGroup("symptoms", ["Cramps", "Fatigue", "Headache", "Bloating", "Mood swings", "Cravings"], true) + "</section>" +
+    '<section class="card"><span class="label">Mood</span>' +
+      chipGroup("mood", ["Happy", "Calm", "Energetic", "Good", "Neutral", "Tired", "Sad", "Irritated", "Anxious", "Low energy", "Sensitive"], false) +
+      '<p class="small">Your mood helps Lumenstru plan tasks around your energy.</p></section>' +
+    (canEnd ? '<section class="card"><div class="row"><label class="grow" for="end-switch"><b>End period</b><br><span class="small">' +
+      (log.end ? "Your period ends on " + shortDate(log.day) + "." : "Turn on if this is your last day.") + "</span></label>" +
+      '<input type="checkbox" class="switch" id="end-switch" ' + (log.end ? "checked" : "") + ' onchange="log.end = this.checked; render()"></div></section>' : "") +
+    '<button class="btn block" onclick="saveLog()">' + label + "</button>";
 }
+
 function saveLog() {
-  if (!dayInfo(TODAY).period) periodStarts.push(new Date(TODAY));
-  logDraft = { flow: "", pain: "", symptoms: [], mood: "" };
+  const answers = { flow: log.flow, severity: log.severity, symptoms: log.symptoms.slice(), mood: log.mood };
+  const active = activePeriod();
+  const rec = periodOn(log.day) || active;
+
+  // 1. no period covers this day: it starts a new one, and the app turns to Lavender Mode
+  if (!rec) {
+    periods.push({ start: log.day, end: null, logs: { [log.day]: answers } });
+    setMode("dark");
+    go("dashboard");
+    toast("Period started", "Logged for " + shortDate(log.day) + ". Lavender Mode is on.");
+    return;
+  }
+  // 2. save the day into the period it belongs to
+  rec.logs[log.day] = answers;
+  if (log.day < rec.start) rec.start = log.day;
+
+  // 3. end the period if the switch is on, and go back to Matcha Mode
+  if (log.end && !rec.end) {
+    rec.end = log.day;
+    setMode("light");
+    go("dashboard");
+    toast("Period ended", shortDate(rec.start) + " to " + shortDate(log.day) + ". Matcha Mode is on.");
+    return;
+  }
   go("dashboard");
-  toast("Saved", "Today's log is saved. Your predictions are updated.");
+  toast("Saved", "Your log for " + shortDate(log.day) + " is saved.");
 }
 
 // ----- Tasks + Add Task -----
+let taskTab = "all";
 function tasksScreen() {
-  const high = tasks.filter(t => dayInfo(addDays(TODAY, t.due)).energy !== 1);
-  const low = tasks.filter(t => dayInfo(addDays(TODAY, t.due)).energy === 1);
+  let list = tasks;
+  if (taskTab === "today") list = tasks.filter(t => t.due === TODAY_ISO);
+  if (taskTab === "upcoming") list = tasks.filter(t => t.due > TODAY_ISO);
+  list = sortTasks(list);
+  const high = list.filter(t => t.energy !== "low");
+  const low = list.filter(t => t.energy === "low");
+  const tab = (key, name) => '<button class="' + (taskTab === key ? "on" : "") + '" onclick="taskTab = \'' + key + '\'; render()">' + name + "</button>";
   return header("Tasks", "Small steps count") +
+    '<div class="tabs">' + tab("all", "All") + tab("today", "Today") + tab("upcoming", "Upcoming") + "</div>" +
     '<button class="btn block" onclick="go(\'addTask\')">+ Add a task</button>' +
-    '<p class="small">Hard tasks due on low-energy days are planned on a better day for you, automatically.</p>' +
-    '<span class="label">High-energy days</span><section class="card">' + (high.map(taskRow).join("") || '<p class="small">Nothing here.</p>') + "</section>" +
-    '<span class="label">Low-energy days</span><section class="card">' + (low.map(taskRow).join("") || '<p class="small">No tasks fall on low-energy days.</p>') + "</section>";
+    '<span class="label">High-energy days (Follicular / Ovulatory)</span>' +
+    '<section class="card">' + (high.map(taskRow).join("") || '<p class="small">Nothing here right now.</p>') + "</section>" +
+    '<span class="label">Low-energy days (Luteal / Menstrual)</span>' +
+    '<section class="card">' + (low.map(taskRow).join("") || '<p class="small">Nothing here right now.</p>') + "</section>";
 }
 
+let newTask = { name: "", difficulty: 3, energy: "high", due: "" };
 function addTaskScreen() {
-  return header("Add Task", "Lumenstru checks your energy on the due day", "tasks") +
+  const n = newTask;
+  const diff = [1, 2, 3, 4, 5].map(v => '<button type="button" class="chip ' + (n.difficulty === v ? "on" : "") + '" onclick="newTask.difficulty = ' + v + '; render()">' + v + "</button>").join("");
+  const energy = [["high", "High"], ["med", "Medium"], ["low", "Low"]].map(e =>
+    '<button type="button" class="chip ' + (n.energy === e[0] ? "on" : "") + '" onclick="newTask.energy = \'' + e[0] + '\'; render()">' + e[1] + "</button>").join("");
+  return header("Add Task", "A new to-do", "tasks") +
     '<form class="card" onsubmit="addTask(event)">' +
-      '<label class="field" for="t-name">Task name<input id="t-name" placeholder="e.g. Revise for AI quiz" required></label>' +
-      '<label class="field" for="t-due">Due in<select id="t-due">' +
-        [0, 1, 2, 3, 5, 7, 10, 14].map(d => '<option value="' + d + '">' + (d === 0 ? "Today" : shortDate(addDays(TODAY, d)) + " (" + d + " days)") + "</option>").join("") +
-      "</select></label>" +
-      '<label class="field" for="t-hard">How hard is it?<select id="t-hard"><option value="0">Easy</option><option value="1">Hard</option></select></label>' +
+      '<label class="field" for="t-name">1. Task name<input id="t-name" placeholder="e.g. Revise for AI quiz" value="' + esc(n.name) + '" oninput="newTask.name = this.value"></label>' +
+      '<div class="field">2. Difficulty (1 = easy, 5 = very hard)<div class="diff">' + diff + "</div></div>" +
+      '<div class="field">3. Energy needed<div class="chips">' + energy + "</div></div>" +
+      '<label class="field" for="t-due">4. Due date<input id="t-due" type="date" min="' + TODAY_ISO + '" value="' + n.due + '" oninput="newTask.due = this.value"></label>' +
       '<button class="btn block" type="submit">Save task</button>' +
     "</form>";
 }
 function addTask(e) {
   e.preventDefault();
-  const name = document.getElementById("t-name").value.trim();
-  if (!name) return;
-  const due = Number(document.getElementById("t-due").value);
-  const hard = document.getElementById("t-hard").value === "1";
-  tasks.push({ name, due, hard, done: false });
+  const name = newTask.name.trim();
+  if (!name) { toast("Name needed", "Give your task a name first."); return; }
+  tasks.push({ id: nextTaskId++, name: name, difficulty: newTask.difficulty, energy: newTask.energy, due: newTask.due || iso(addDays(TODAY, 7)), done: false });
   go("tasks");
-  const low = dayInfo(addDays(TODAY, due)).energy === 1;
-  toast("Task added", hard && low ? "It is due on a low-energy day, so Lumenstru will plan it on a better day for you." : name + " is on your list.");
+  toast("Task added", name + " is on your list.");
 }
 
 // ----- Calm Space -----
@@ -788,22 +839,15 @@ const TRACKS = [
   { title: "Relaxation Track", text: "174 Hz relaxing tones for cramp comfort", file: "assets/audio/calm2.mp3" },
   { title: "Sleep Track", text: "Soft music for sleep", file: "assets/audio/calm3.mp3" },
 ];
-const STRETCHES = [
-  ["Neck tilt", "Tilt your head to one side, hold for 15 seconds, then swap."],
-  ["Side bend", "Reach one arm over your head and bend gently to the side."],
-  ["Shoulder rolls", "Roll your shoulders back slowly ten times."],
-  ["Cat-cow", "On hands and knees, round your back, then let it dip."],
-  ["Child's pose", "Kneel, sit back on your heels and stretch your arms forward."],
-];
+const TOOLS = {
+  Breathing: "Breathe in for 4 counts, hold for 4, then breathe out for 6. Repeat five times.",
+  Meditation: "Close your eyes. Notice five things you can hear, four you can feel and three you can smell.",
+  Stretching: "Roll your shoulders back, reach your arms overhead and gently twist from side to side.",
+};
 
 const player = new Audio();
 player.loop = true;
 let trackIndex = 0;
-let calmTool = "";       // "", "breathing", "meditation" or "stretch"
-let stretchStep = 0;
-let breathTimer = null;
-let meditationTimer = null;
-let meditationLeft = 300; // seconds
 
 // time like 1:05
 function mmss(sec) {
@@ -816,53 +860,25 @@ function calmScreen() {
   const playing = !player.paused;
   return header("Calm Space", "A few quiet minutes") +
     '<section class="card center">' +
+      '<span class="label">' + (playing ? "Now playing" : "Paused") + "</span>" +
       '<div class="disc"><span class="mascot ' + (playing ? "bob" : "") + '" style="--size:80px" aria-hidden="true"></span></div>' +
       "<h3>" + t.title + '</h3><p class="small">' + t.text + "</p>" +
       '<button class="play" aria-label="' + (playing ? "Pause" : "Play") + '" onclick="playTrack(' + trackIndex + ')">' + icon(playing ? "pause" : "play") + "</button>" +
       '<div class="progress"><span id="calm-bar" style="width:' + (player.duration ? player.currentTime / player.duration * 100 : 0) + '%"></span></div>' +
       '<div class="row between small" style="width:100%"><span id="calm-time" class="num">' + mmss(player.currentTime) + '</span><span class="num">2:00</span></div>' +
     "</section>" +
-
     '<span class="label">Quick relax</span>' +
     '<div class="group">' + TRACKS.map((tr, i) =>
       '<button class="setting' + (i === trackIndex ? " picked" : "") + '" onclick="playTrack(' + i + ')">' +
         '<span class="grow"><b>' + tr.title + '</b><br><span class="small">' + tr.text + "</span></span>" +
         '<span class="small num">2:00</span>' + icon(i === trackIndex && playing ? "pause" : "play") + "</button>"
     ).join("") + "</div>" +
-
     '<span class="label">Tools</span>' +
     '<div class="tools">' +
-      toolButton("breathing", "drop", "Breathing") +
-      toolButton("meditation", "calm", "Meditation") +
-      toolButton("stretch", "heart", "Stretching") +
-    "</div>" +
-    toolPanel();
-}
-
-function toolButton(name, iconName, label) {
-  return '<button class="tool' + (calmTool === name ? " on" : "") + '" onclick="openTool(\'' + name + '\')">' + icon(iconName) + label + "</button>";
-}
-
-function toolPanel() {
-  if (calmTool === "breathing") {
-    return '<section class="card center">' +
-      '<div class="breath" id="breath">Ready</div>' +
-      '<p class="small">Breathe in for 4, hold for 4, out for 6.</p>' +
-      '<button class="btn" id="breath-btn" onclick="toggleBreathing()">' + (breathTimer ? "Stop" : "Start breathing") + "</button></section>";
-  }
-  if (calmTool === "meditation") {
-    return '<section class="card center"><div class="hero-time num" id="med-time">' + mmss(meditationLeft) + "</div>" +
-      '<p class="small">Sit comfortably and follow your breath until the timer ends.</p>' +
-      '<button class="btn" onclick="toggleMeditation()">' + (meditationTimer ? "Stop" : "Start 5 minutes") + "</button></section>";
-  }
-  if (calmTool === "stretch") {
-    const s = STRETCHES[stretchStep];
-    return '<section class="card"><span class="label">Stretch ' + (stretchStep + 1) + " of " + STRETCHES.length + "</span>" +
-      "<h3>" + s[0] + '</h3><p class="small">' + s[1] + "</p>" +
-      '<div class="row between"><button class="btn ghost small" onclick="moveStretch(-1)"' + (stretchStep === 0 ? " disabled" : "") + ">Back</button>" +
-      '<button class="btn small" onclick="moveStretch(1)">' + (stretchStep === STRETCHES.length - 1 ? "Done" : "Next") + "</button></div></section>";
-  }
-  return "";
+      '<button class="tool" onclick="openTool(\'Breathing\')">' + icon("wind") + "Breathing</button>" +
+      '<button class="tool" onclick="openTool(\'Meditation\')">' + icon("calm") + "Meditation</button>" +
+      '<button class="tool" onclick="openTool(\'Stretching\')">' + icon("heart") + "Stretching</button>" +
+    "</div>";
 }
 
 function playTrack(i) {
@@ -877,7 +893,6 @@ function playTrack(i) {
   }
   render();
 }
-
 // move the progress bar without drawing the whole screen again
 player.addEventListener("timeupdate", () => {
   const bar = document.getElementById("calm-bar");
@@ -885,79 +900,21 @@ player.addEventListener("timeupdate", () => {
   bar.style.width = (player.currentTime / player.duration * 100) + "%";
   document.getElementById("calm-time").textContent = mmss(player.currentTime);
 });
-player.addEventListener("play", () => { if (screen === "calm") render(); });
-player.addEventListener("pause", () => { if (screen === "calm") render(); });
+player.addEventListener("play", render);
+player.addEventListener("pause", render);
 
 function openTool(name) {
-  calmTool = calmTool === name ? "" : name;
-  render();
-  const box = document.getElementById("screen");
-  box.scrollTop = box.scrollHeight;
+  openSheet(name, '<p>' + TOOLS[name] + "</p>");
 }
 
-function toggleBreathing() {
-  if (breathTimer) {
-    clearTimeout(breathTimer);
-    breathTimer = null;
-    render();
-    return;
-  }
-  const steps = [["Breathe in", 4000, true], ["Hold", 4000, true], ["Breathe out", 6000, false]];
-  let i = 0;
-  function next() {
-    const circle = document.getElementById("breath");
-    if (!circle) { breathTimer = null; return; } // left the screen
-    circle.textContent = steps[i][0];
-    circle.classList.toggle("in", steps[i][2]);
-    breathTimer = setTimeout(next, steps[i][1]);
-    i = (i + 1) % steps.length;
-  }
-  document.getElementById("breath-btn").textContent = "Stop";
-  next();
-}
+// ----- AI Assistant (scripted replies for the prototype) -----
+let chat = [{ me: false, text: "Hi " + userName + ". I'm here to help. Ask me about tasks, energy or how you're feeling." }];
+const PROMPTS = ["Suggest a focus task", "How can I manage my energy today?", "Tips to improve my sleep", "I'm feeling stressed"];
 
-function toggleMeditation() {
-  if (meditationTimer) {
-    clearInterval(meditationTimer);
-    meditationTimer = null;
-    meditationLeft = 300;
-    render();
-    return;
-  }
-  meditationTimer = setInterval(() => {
-    meditationLeft--;
-    const label = document.getElementById("med-time");
-    if (label) label.textContent = mmss(meditationLeft);
-    if (meditationLeft <= 0) {
-      clearInterval(meditationTimer);
-      meditationTimer = null;
-      meditationLeft = 300;
-      toast("Meditation done", "Well done. Take that calm into your next task.");
-      if (screen === "calm") render();
-    }
-  }, 1000);
-  render();
-}
-
-function moveStretch(n) {
-  if (n > 0 && stretchStep === STRETCHES.length - 1) {
-    stretchStep = 0;
-    calmTool = "";
-    render();
-    toast("Stretches done", "Nice work. Your body will thank you.");
-    return;
-  }
-  stretchStep = Math.max(0, stretchStep + n);
-  render();
-}
-
-// ----- AI Assistant (rule-based, uses the user's own data) -----
 function aiScreen() {
-  return header("AI Assistant", "Answers from your own data", "dashboard") +
-    '<div class="chat" id="chat">' + chat.map(m => '<div class="msg ' + (m.me ? "me" : "bot") + '">' + esc(m.text) + "</div>").join("") + "</div>" +
-    '<div class="chips">' +
-      ["When is my next period?", "What phase am I in?", "What should I study today?"].map(q => '<button class="chip" onclick="ask(\'' + q + '\')">' + q + "</button>").join("") +
-    "</div>" +
+  return header("AI Assistant", "Your study and wellbeing helper", "dashboard") +
+    '<div class="chips">' + PROMPTS.map((q, i) => '<button class="chip" onclick="ask(PROMPTS[' + i + '])">' + esc(q) + "</button>").join("") + "</div>" +
+    '<div class="chat">' + chat.map(m => '<div class="msg ' + (m.me ? "me" : "bot") + '">' + esc(m.text) + "</div>").join("") + "</div>" +
     '<form class="row" onsubmit="event.preventDefault(); ask(document.getElementById(\'ai-input\').value)">' +
       '<input id="ai-input" placeholder="Type your message" aria-label="Message"><button class="btn small" type="submit">Send</button>' +
     "</form>";
@@ -971,69 +928,107 @@ function ask(question) {
   box.scrollTop = box.scrollHeight;
 }
 function answer(q) {
-  const p = predict();
-  const info = dayInfo(TODAY);
-  if (q.includes("period") || q.includes("when")) {
-    return "Your next period is expected around " + shortDate(p.nextStart) + ", most likely between " +
-      shortDate(addDays(p.nextStart, -p.range)) + " and " + shortDate(addDays(p.nextStart, p.range)) + ", learned from your own cycles.";
-  }
-  if (q.includes("phase")) {
-    return "You're on day " + p.cycleDay + ", in your " + info.phase + " phase. These are estimates, not medical predictions.";
-  }
-  if (q.includes("study") || q.includes("task")) {
-    const open = tasks.filter(t => !t.done);
-    if (open.length === 0) return "You have no open tasks. A good moment to plan ahead.";
-    const hard = open.find(t => t.hard);
-    return info.energy === 3 && hard ? "Your energy is high today, so start with \"" + hard.name + "\"." : "Start with something light, like \"" + open[0].name + "\", and take regular breaks.";
-  }
-  return "I can help with your cycle, your energy and your tasks. Try one of the suggestions below.";
+  const info = dayInfo(TODAY_ISO);
+  const focus = focusTask();
+  if (q.includes("focus")) return focus ? "Try \"" + focus.name + "\". It matters most and is due " + dueLabel(focus.due).toLowerCase() + "." : "You're all caught up.";
+  if (q.includes("energy")) return "You're in your " + info.phase + " phase, so today looks like a " + info.energy.toLowerCase() + " energy day. " +
+    (info.energy === "High" ? "A good day to do your hardest task first." : "Keep tasks light and take breaks.");
+  if (q.includes("sleep")) return "Try a wind-down routine: dim the lights an hour before bed and play the Sleep Track in Calm Space.";
+  if (q.includes("stress")) return "Let's take a breath together. Open Calm Space and try the Breathing tool for a minute.";
+  if (q.includes("task")) return "Open the Tasks tab. I'll help you sort them by what matters most.";
+  if (q.includes("period") || q.includes("cycle")) return "You can log your period any time from the Dashboard. Tap Log Period.";
+  return "I'm still learning. Try one of the suggestions above.";
 }
 
 // ----- Reminders (the Survival Suite) -----
-const REMINDERS = [
-  { key: "hydration", title: "Hydration Reminder", text: "Long study sessions use more water than you think. Keep a bottle on your desk.", action: "Got it" },
-  { key: "rest", title: "Rest Reminder", text: "Take a 10-minute break after each hour of study.", action: "Rest now" },
-  { key: "task", title: "Task Reminder", text: "You have 1 pending task for today: Finish OS lab report.", action: "View task" },
-];
+let remTab = "reminders";
 function remindersScreen() {
-  const open = REMINDERS.filter(r => notifications[r.key].on && !resolved.includes(r.key));
-  return header("Reminders", "Your Survival Suite for today", "dashboard") +
-    (open.length === 0 ? '<section class="card"><p class="small">All done for today.</p></section>' :
-      open.map(r => '<section class="card"><div class="row between"><h3>' + r.title + '</h3><span class="pill">' + timeLabel(notifications[r.key].time) + "</span></div>" +
+  const list = reminders.filter(r => (remTab === "history" ? r.done : !r.done));
+  const tab = (key, name) => '<button class="' + (remTab === key ? "on" : "") + '" onclick="remTab = \'' + key + '\'; render()">' + name + "</button>";
+  return header("Survival Suite", "Reminders through your day", "dashboard") +
+    '<div class="tabs two">' + tab("reminders", "Reminders") + tab("history", "History") + "</div>" +
+    (list.length === 0 ? '<section class="card"><p class="small">Nothing to show.</p></section>' :
+      list.map(r => '<section class="card"><div class="row between"><h3>' + r.title + '</h3><span class="pill">' + r.time + "</span></div>" +
         '<p class="small">' + r.text + "</p>" +
-        '<button class="btn small" style="align-self:flex-start" onclick="resolveReminder(\'' + r.key + '\')">' + r.action + "</button></section>").join("")) +
-    '<button class="btn ghost block" onclick="openNotifications()">Change reminder times</button>';
+        (r.done ? '<p class="small">Done</p>' : '<button class="btn small" style="align-self:flex-start" onclick="doneReminder(' + r.id + ')">' + r.action + "</button>") +
+      "</section>").join("")) +
+    '<button class="btn ghost block" onclick="openNotifications()">Notification Settings</button>';
 }
-function resolveReminder(key) {
-  resolved.push(key);
-  if (key === "task") { go("tasks"); return; }
+function doneReminder(id) {
+  const r = reminders.find(x => x.id === id);
+  r.done = true;
+  if (r.title === "Task Reminder") { go("tasks"); return; }
   render();
-  toast("Done", "Nice. See you at the next reminder.");
+  toast("Done", "Marked as done. It is in History now.");
+}
+
+// ----- Notification Settings (sheet) and toggles -----
+const NOTIF_ROWS = [["dnd", "Do Not Disturb"], ["hydration", "Hydration reminders"], ["rest", "Rest reminders"], ["taskAlerts", "Task alerts"]];
+function notifToggles() {
+  return '<div class="group">' + NOTIF_ROWS.map(r =>
+    '<div class="setting"><label class="grow" for="n-' + r[0] + '">' + r[1] + "</label>" +
+    '<input type="checkbox" class="switch" id="n-' + r[0] + '" ' + (notif[r[0]] ? "checked" : "") + ' onchange="notif.' + r[0] + ' = this.checked"></div>'
+  ).join("") + "</div>";
+}
+function openNotifications() {
+  openSheet("Notification Settings", notifToggles());
 }
 
 // ----- Profile -----
 function profileScreen() {
-  const p = predict();
-  const row = (iconName, label, action, extra) => '<button class="setting" onclick="' + action + '">' + icon(iconName) +
-    '<span class="grow">' + label + "</span>" + (extra ? '<span class="small">' + extra + "</span>" : "") + '<span class="chev">›</span></button>';
+  const row = (iconName, label, action) => '<button class="setting" onclick="' + action + '">' + icon(iconName) +
+    '<span class="grow">' + label + '</span><span class="chev">›</span></button>';
   return header("Profile", "Make Lumenstru feel like yours") +
-    '<div class="row"><span class="mascot" style="--size:72px" aria-hidden="true"></span><div><h2>' + USER_NAME + '</h2><p class="small">Saved on this phone · example profile</p></div></div>' +
+    '<section class="card"><div class="row"><span class="mascot" style="--size:64px" aria-hidden="true"></span>' +
+      '<div class="grow"><h2>' + esc(userName) + '</h2><p class="small">' + USER_EMAIL + "</p></div>" +
+      '<button class="iconbtn" aria-label="Edit name" onclick="editName()">' + icon("edit") + "</button></div></section>" +
     '<div class="group">' +
-      row("heart", "My Cycle", "go('calendar')", p.cycleLength + "-day cycle") +
-      row("tasks", "Reminders", "go('reminders')") +
+      row("heart", "My Cycle and Profile", "go('logPeriod')") +
+      row("bell", "Reminders", "go('reminders')") +
       row("bell", "Notification Settings", "openNotifications()") +
+      row("gear", "App Settings", "go('settings')") +
+      row("help", "Help and Support", "showHelp()") +
+      row("info", "About", "showAbout()") +
     "</div>" +
-    '<div class="group">' +
-      '<div class="setting">' + icon("calm") + '<label class="grow" for="p-dark">Lavender (dark) mode</label>' +
-        '<input type="checkbox" class="switch" id="p-dark" ' + (isDark() ? "checked" : "") + ' onchange="setMode(this.checked ? \'dark\' : \'light\')"></div>' +
-      row("login", "Sign out", "go('signin')") +
-    "</div>";
+    '<div class="group"><div class="setting">' + icon("calm") + '<label class="grow" for="p-dark">Lavender (dark) mode</label>' +
+      '<input type="checkbox" class="switch" id="p-dark" ' + (isDark() ? "checked" : "") + ' onchange="setMode(this.checked ? \'dark\' : \'light\')"></div></div>' +
+    '<button class="btn block" onclick="logOut()">Log out</button>';
+}
+function editName() {
+  openSheet("Edit Profile",
+    '<label class="field" for="e-name">Display name<input id="e-name" value="' + esc(userName) + '"></label>' +
+    '<button class="btn block" onclick="saveName()">Save changes</button>', true);
+}
+function saveName() {
+  const v = document.getElementById("e-name").value.trim();
+  if (v) userName = v;
+  closeSheet();
+  render();
+  toast("Profile updated", "Your name is saved.");
+}
+function showHelp() {
+  openSheet("Help and Support", "<p>Ask the AI Assistant anything, or read the user guide that comes with the app.</p>");
+}
+function showAbout() {
+  openSheet("About Lumenstru AI", "<p>Lumenstru AI is a study planner that plans around your cycle. Matcha Mode by day, Lavender Mode on low-energy days. Version 1.0, prototype.</p>");
+}
+function logOut() {
+  go("signin");
+  toast("Logged out", "See you soon.");
+}
+
+// ----- App Settings -----
+function settingsScreen() {
+  return header("App Settings", "Make the app work for you", "profile") +
+    '<span class="label">Theme</span>' +
+    '<div class="chips"><button class="chip ' + (isDark() ? "" : "on") + '" onclick="setMode(\'light\')">Matcha</button>' +
+      '<button class="chip ' + (isDark() ? "on" : "") + '" onclick="setMode(\'dark\')">Lavender</button></div>' +
+    '<span class="label">Notifications</span>' + notifToggles();
 }
 
 // ----- Matcha / Lavender mode -----
-let mode = load("mode", "system");
+let mode = load("mode", "light");
 function isDark() {
-  if (mode === "system") return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
   return mode === "dark";
 }
 function setMode(m) {
@@ -1045,64 +1040,20 @@ function setMode(m) {
   render();
 }
 
-// ----- Notification Settings sheet -----
-const NOTIFICATION_ROWS = [
-  { key: "hydration", label: "Hydration", text: "Time to drink water. Long study sessions use more water than you think." },
-  { key: "rest", label: "Rest", text: "Take a 10-minute break. Rest is part of the plan." },
-  { key: "task", label: "Tasks", text: "You have 1 pending task for today: Finish OS lab report." },
-  { key: "period", label: "Period alerts", text: "Your period may start in about 2 days. Pack pads or a cup and get ahead on harder tasks." },
-  { key: "weekly", label: "Weekly summary (Sun)", text: "5 tasks done · 6.5 h studied · 4-day streak · Luteal phase" },
-];
-
-function openNotifications() {
-  const n = notifications;
-  const rows = NOTIFICATION_ROWS.map(r =>
-    '<div class="setting"><label class="grow" for="t-' + r.key + '">' + r.label + "</label>" +
-      '<input type="time" id="t-' + r.key + '" value="' + n[r.key].time + '" onchange="setTime(\'' + r.key + '\', this.value)">' +
-      '<input type="checkbox" class="switch" ' + (n[r.key].on ? "checked" : "") + ' onchange="setOn(\'' + r.key + '\', this.checked)" aria-label="' + r.label + ' on or off">' +
-    "</div>"
-  ).join("");
-
+// ----- bottom sheet and toast -----
+// hasButton = the body already has its own button, so no "Done" is added
+function openSheet(title, body, hasButton) {
   document.getElementById("sheet-root").innerHTML =
     '<div class="overlay" onclick="if (event.target === this) closeSheet()">' +
-      '<div class="sheet" role="dialog" aria-label="Notification Settings"><div class="handle"></div>' +
-        "<h2>Notification Settings</h2>" +
-        '<div class="group"><div class="setting"><label class="grow" for="s-dnd">Do Not Disturb</label>' +
-          '<input type="checkbox" class="switch" id="s-dnd" ' + (n.dnd ? "checked" : "") + ' onchange="setDnd(this.checked)"></div></div>' +
-        '<p class="small">Tap a time to change it.</p>' +
-        '<div class="group">' + rows +
-        "</div>" +
-        '<span class="label">Preview a notification</span>' +
-        '<div class="chips">' + NOTIFICATION_ROWS.map(r => '<button class="chip" onclick="previewNotification(\'' + r.key + '\')">' + r.label + "</button>").join("") +
-          "</div>" +
-        '<button class="btn block" onclick="closeSheet(); render()">Done</button>' +
+      '<div class="sheet" role="dialog" aria-label="' + title + '"><div class="handle"></div>' +
+        "<h2>" + title + "</h2>" + body +
+        (hasButton ? "" : '<button class="btn block" onclick="closeSheet()">Done</button>') +
       "</div>" +
     "</div>";
 }
 function closeSheet() {
   document.getElementById("sheet-root").innerHTML = "";
 }
-function setTime(key, value) {
-  if (!value) return;
-  notifications[key].time = value;
-  save("notifications", notifications);
-  toast("Time saved", NOTIFICATION_ROWS.find(r => r.key === key).label + " now comes at " + timeLabel(value) + ".");
-}
-function setOn(key, on) {
-  notifications[key].on = on;
-  save("notifications", notifications);
-}
-function setDnd(on) {
-  notifications.dnd = on;
-  save("notifications", notifications);
-}
-function previewNotification(key) {
-  const r = NOTIFICATION_ROWS.find(x => x.key === key);
-  const n = notifications[key];
-  if (notifications.dnd || !n.on) { toast(r.label + " is off", "Turn it on (and Do Not Disturb off) to get this notification."); return; }
-  toast(r.label + " · " + timeLabel(n.time), r.text);
-}
-// ----- toast (pop-up message inside the phone) -----
 let toastTimer = null;
 function toast(title, text) {
   document.getElementById("toast-root").innerHTML =
@@ -1119,14 +1070,11 @@ function showClock() {
 showClock();
 setInterval(showClock, 30000);
 
-if (mode !== "system") document.documentElement.setAttribute("data-theme", mode);
-document.getElementById("btn-matcha").classList.toggle("on", !isDark());
-document.getElementById("btn-lavender").classList.toggle("on", isDark());
-
 // open a screen from the link, e.g. index.html#calendar
 const start = location.hash.slice(1);
-if (NAV_ITEMS.some(item => item[0] === start) && start !== "notifications") screen = start;
-render();
+if (NAV_ITEMS.some(item => item[0] === start)) screen = start;
+if (screen === "logPeriod") startLog(TODAY_ISO);
+setMode(mode);
 </script>
 
 </body>
