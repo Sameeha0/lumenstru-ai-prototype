@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumenstru AI Prototype</title>
+<!-- Lumenstru AI high-fidelity prototype: plain HTML, CSS and JS in one file.
+     All data is example data made relative to today. -->
+<style>
+/* fonts are stored locally so it works offline */
+@font-face { font-family: 'Lora'; font-weight: 500; font-style: normal; src: url('assets/fonts/lora_medium.ttf') format('truetype'); }
+@font-face { font-family: 'Lora'; font-weight: 600; font-style: normal; src: url('assets/fonts/lora_semibold.ttf') format('truetype'); }
+@font-face { font-family: 'Lora'; font-weight: 500; font-style: italic; src: url('assets/fonts/lora_medium_italic.ttf') format('truetype'); }
+@font-face { font-family: 'DM Sans'; font-weight: 400; font-style: normal; src: url('assets/fonts/dm_sans_regular.ttf') format('truetype'); }
+@font-face { font-family: 'DM Sans'; font-weight: 500; font-style: normal; src: url('assets/fonts/dm_sans_medium.ttf') format('truetype'); }
+@font-face { font-family: 'DM Sans'; font-weight: 600; font-style: normal; src: url('assets/fonts/dm_sans_semibold.ttf') format('truetype'); }
+@font-face { font-family: 'DM Sans'; font-weight: 700; font-style: normal; src: url('assets/fonts/dm_sans_bold.ttf') format('truetype'); }
+
+  /* Matcha = light mode, Lavender = dark mode */
+  :root {
+    --page: #F2EFE9;
+    --bg: #FBF9F6;
+    --card: #F2EFE9;
+    --line: #E3DED5;
+    --primary: #5A7156;
+    --rose: #E5A99E;      /* only for period things */
+    --rose-ink: #9C5547;
+    --ink: #2A3229;
+    --ink2: #5F685D;
+    --muted: #8D958B;
+    --on-primary: #FBF9F6;
+    --bezel: #2A3229;
+    --glow: rgba(229, 169, 158, 0.20);
+    /* mascot is green by day, pink at night */
+    --mascot-day: url("assets/images/mascot-day.webp");
+    --mascot-night: url("assets/images/mascot-night.webp");
+    --mascot: var(--mascot-day);
+    --serif: "Lora", Georgia, "Times New Roman", serif;
+    --sans: "DM Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page: #070D1A; --bg: #0B1325; --card: #182238; --line: #26314C; --primary: #C3B5E3; --rose: #E5A99E;
+      --rose-ink: #F0BDB3; --ink: #EAEFF8; --ink2: #B4BDD2; --muted: #4E5978; --on-primary: #0B1325;
+      --bezel: #182238; --glow: rgba(195, 181, 227, 0.16); --mascot: var(--mascot-night); color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page: #070D1A; --bg: #0B1325; --card: #182238; --line: #26314C; --primary: #C3B5E3; --rose: #E5A99E;
+    --rose-ink: #F0BDB3; --ink: #EAEFF8; --ink2: #B4BDD2; --muted: #4E5978; --on-primary: #0B1325;
+    --bezel: #182238; --glow: rgba(195, 181, 227, 0.16); --mascot: var(--mascot-night); color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    padding-inline: 16px;
+  }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 600; margin: 0; text-wrap: balance; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 20px; }
+  h3 { font-size: 17px; }
+  p { margin: 0; }
+
+  /* page layout: top bar, navigator and phone frame */
+  .wrap { max-width: 1100px; margin: 0 auto; padding-block: 24px 40px; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .brand { font-family: var(--serif); font-size: 26px; font-weight: 600; background: transparent; color: var(--ink); border: 0; cursor: pointer; padding: 0; }
+  .brand i { color: var(--primary); font-style: italic; }
+  .modes { display: flex; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); }
+  .modebtn { border: 0; background: transparent; color: var(--ink2); border-radius: 999px; padding: 8px 16px; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
+  .modebtn.on { background: var(--primary); color: var(--on-primary); }
+
+  .layout { display: grid; grid-template-columns: 240px 1fr; gap: 32px; margin-top: 24px; align-items: start; }
+  .layout > * { min-width: 0; }
+  .side { position: sticky; top: 20px; background: var(--bg); border: 1px solid var(--line); border-radius: 22px; padding: 20px 16px; }
+  .side h3 { font-style: italic; }
+  .side .hint { font-size: 12px; color: var(--muted); margin: 2px 0 14px; }
+  .devnav { display: grid; gap: 2px; }
+  .devnav button { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; color: var(--ink2); font: inherit; font-size: 14px; text-align: left; padding: 8px 10px; border-radius: 12px; cursor: pointer; }
+  .devnav button svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .devnav button:hover { background: var(--card); color: var(--ink); }
+  .devnav button.on { background: var(--card); color: var(--primary); font-weight: 700; }
+  .side hr { border: 0; border-top: 1px solid var(--line); margin: 14px 0; }
+  .side .note { font-size: 12px; color: var(--muted); }
+
+  .preview { display: flex; justify-content: center; }
+  .phone { width: 392px; max-width: 100%; height: 812px; border: 10px solid var(--bezel); border-radius: 46px; background: var(--bg); position: relative; overflow: hidden; display: flex; flex-direction: column; }
+  .notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 24px; background: var(--bezel); border-radius: 0 0 16px 16px; z-index: 6; }
+  .statusbar { display: flex; justify-content: space-between; padding: 10px 24px 4px; font-size: 12px; font-weight: 700; color: var(--ink); }
+  .screen { flex: 1; overflow-y: auto; padding: 8px 18px 24px; display: flex; flex-direction: column; gap: 16px;
+    background-image: radial-gradient(30rem 18rem at 50% -5%, var(--glow), transparent 70%); }
+  .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); background: var(--card); border-top: 1px solid var(--line); padding-bottom: 6px; }
+  .tabbar button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 11px; padding: 8px 0 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
+  .tabbar button.on { color: var(--primary); font-weight: 700; }
+  .tabbar svg { width: 20px; height: 20px; }
+
+  /* app screens */
+  .sub { color: var(--ink2); font-size: 14px; }
+  .small { font-size: 13px; color: var(--ink2); }
+  .label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink2); font-weight: 700; }
+  .num { font-variant-numeric: tabular-nums; }
+  .example { font-size: 11px; color: var(--muted); }
+
+  .card { background: var(--card); border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .row { display: flex; align-items: center; gap: 10px; }
+  .row.between { justify-content: space-between; }
+  .grow { flex: 1; min-width: 0; }
+  .center { text-align: center; align-items: center; }
+  .screen hr { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+  .btn { font: inherit; cursor: pointer; border: 0; background: var(--primary); color: var(--on-primary); border-radius: 999px; padding: 12px 18px; font-weight: 700; }
+  .btn.ghost { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+  .btn.small { padding: 7px 14px; font-size: 13px; }
+  .btn.block { width: 100%; }
+  .btn.rose { background: var(--rose); color: #2A3229; }
+  .link { border: 0; background: transparent; color: var(--rose-ink); font: inherit; font-weight: 700; cursor: pointer; padding: 4px; }
+  button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  input, select { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; width: 100%; }
+  .field { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 700; color: var(--ink2); }
+
+  .header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .iconbtn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--ink); display: grid; place-items: center; cursor: pointer; flex-shrink: 0; }
+  .iconbtn svg { width: 19px; height: 19px; }
+
+  /* cycle ring */
+  .ring-wrap { display: grid; place-items: center; position: relative; }
+  .ring-text { position: absolute; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .ring-text .big { font-family: var(--serif); font-size: 44px; line-height: 1.05; }
+  .ring-text .phase { font-family: var(--serif); font-style: italic; color: var(--rose-ink); }
+  .next-chip { align-self: center; display: inline-flex; gap: 6px; align-items: center; font-size: 12px; color: var(--primary); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; background: var(--bg); cursor: pointer; font-family: var(--sans); }
+  .next-chip svg { width: 14px; height: 14px; }
+
+  .quicklog { display: flex; align-items: center; gap: 14px; background: var(--primary); color: var(--on-primary); border: 0; border-radius: 999px; padding: 10px; text-align: left; font: inherit; cursor: pointer; }
+  .quicklog .plus { width: 44px; height: 44px; border-radius: 50%; background: rgba(251, 249, 246, 0.2); display: grid; place-items: center; font-size: 24px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+  .tile { border: 0; background: transparent; color: var(--ink); display: flex; flex-direction: column; align-items: center; gap: 5px; font: inherit; font-size: 11px; cursor: pointer; padding: 2px 0; }
+  .tile .circle { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; color: var(--primary); }
+  .tile.highlight .circle { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+  .tile svg { width: 19px; height: 19px; }
+
+  .class-row { display: flex; gap: 12px; padding: 8px 0; align-items: flex-start; }
+  .class-row .time { font-family: var(--serif); font-size: 19px; width: 58px; flex-shrink: 0; }
+  .note { color: var(--rose-ink); font-size: 13px; }
+  .task { display: flex; gap: 12px; align-items: center; padding: 8px 0; cursor: pointer; }
+  .task input { width: 20px; height: 20px; accent-color: var(--primary); flex-shrink: 0; }
+  .task.done .name { text-decoration: line-through; color: var(--muted); }
+  .pill { font-size: 11px; border-radius: 999px; padding: 2px 9px; border: 1px solid var(--line); color: var(--ink2); white-space: nowrap; }
+  .pill.low { border-color: var(--rose); color: var(--rose-ink); }
+
+  .bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: end; height: 104px; }
+  .bar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; font-size: 11px; color: var(--ink2); }
+  .bar .fill { width: 100%; max-width: 24px; border-radius: 8px 8px 4px 4px; background: var(--primary); }
+  .bar .fill.low { background: var(--rose); }
+
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { background: transparent; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+  .chip.on { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+  .chip.rose.on { background: var(--rose); color: #2A3229; border-color: var(--rose); }
+
+  .month { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; text-align: center; }
+  .month .dow { font-size: 11px; color: var(--muted); }
+  .day { aspect-ratio: 1; max-width: 100%; border-radius: 50%; background: transparent; color: var(--ink); font-family: var(--serif); font-size: 14px; display: grid; place-items: center; border: 1.5px solid transparent; cursor: pointer; }
+  .day.period { background: var(--rose); color: #2A3229; }
+  .day.predicted { border: 1.5px dashed var(--rose); color: var(--rose-ink); }
+  .day.fertile { color: var(--primary); font-weight: 600; }
+  .day.today { border-color: var(--primary); }
+  .day.selected { outline: 2px solid var(--ink); outline-offset: 1px; }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--ink2); }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 4px; }
+
+
+  .kv { display: grid; grid-template-columns: 1fr auto; gap: 8px; font-size: 14px; }
+  .kv span:nth-child(even) { font-weight: 700; text-align: right; }
+  .hero-num { font-family: var(--serif); font-size: 64px; line-height: 1; }
+
+  .group { background: var(--card); border-radius: 18px; overflow: hidden; }
+  .setting { display: flex; align-items: center; gap: 10px; padding: 12px 14px; width: 100%; border: 0; background: transparent; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+  .group .setting + .setting { border-top: 1px solid var(--line); }
+  .setting svg { width: 18px; height: 18px; color: var(--primary); flex-shrink: 0; }
+  .setting .chev { color: var(--muted); }
+  .setting input[type="time"], .setting select { width: auto; padding: 5px 8px; border-radius: 999px; color: var(--primary); font-weight: 700; }
+
+  .switch { appearance: none; -webkit-appearance: none; width: 44px; height: 26px; border-radius: 99px; background: var(--line); position: relative; cursor: pointer; flex-shrink: 0; border: 0; padding: 0; transition: background 0.2s; }
+  .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--bg); transition: left 0.2s; }
+  .switch:checked { background: var(--rose); }
+  .switch:checked::after { left: 21px; }
+
+  .breath { width: 170px; height: 170px; border-radius: 50%; margin: 12px auto; display: grid; place-items: center; border: 1.5px solid var(--primary); font-family: var(--serif); font-size: 18px; transition: transform 4s ease-in-out; }
+  .breath.in { transform: scale(1.22); }
+
+  .chat { display: flex; flex-direction: column; gap: 8px; }
+  .msg { max-width: 85%; padding: 9px 12px; border-radius: 16px; font-size: 14px; }
+  .msg.bot { background: var(--card); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .msg.me { background: var(--primary); color: var(--on-primary); align-self: flex-end; border-bottom-right-radius: 4px; }
+
+  .overlay { position: absolute; inset: 0; background: rgba(11, 19, 37, 0.45); z-index: 8; display: flex; align-items: flex-end; }
+  .sheet { background: var(--bg); width: 100%; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; padding: 12px 16px 22px; display: flex; flex-direction: column; gap: 12px; }
+  .handle { width: 42px; height: 5px; border-radius: 5px; background: var(--line); margin: 0 auto 4px; }
+  .toast { position: absolute; left: 10px; right: 10px; top: 34px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px 12px; z-index: 9; display: flex; gap: 10px; }
+  .toast .icon { width: 32px; height: 32px; border-radius: 10px; background: var(--primary); color: var(--on-primary); display: grid; place-items: center; font-family: var(--serif); font-weight: 600; flex-shrink: 0; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .mascot { display: inline-block; width: var(--size, 64px); height: var(--size, 64px); background: var(--mascot) center / contain no-repeat; flex-shrink: 0; }
+  .mascot.bob { animation: bob 3s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(-6px); } }
+  .side .mascot { display: block; margin: 0 auto 10px; }
+
+  /* phones: show the app first, navigator underneath */
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; gap: 20px; }
+    .preview { order: -1; }
+    .side { position: static; }
+    .devnav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .phone { border-width: 6px; border-radius: 34px; height: 740px; }
+    .topbar { justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) { .mascot.bob { animation: none; } .breath, .switch, .switch::after { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <button class="brand" onclick="go('dashboard')">Lumenstru <i>AI</i></button>
+    <div class="modes" role="group" aria-label="Mode">
+      <button class="modebtn" id="btn-matcha" onclick="setMode('light')">Matcha Mode</button>
+      <button class="modebtn" id="btn-lavender" onclick="setMode('dark')">Lavender Mode</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="side">
+      <span class="mascot bob" style="--size:84px" aria-hidden="true"></span>
+      <h3>Prototype Navigator</h3>
+      <p class="hint">Every screen is live. Tap around freely.</p>
+      <div class="devnav" id="devnav"></div>
+      <hr>
+      <p class="note">High-fidelity, clickable prototype of the Lumenstru AI Android app. Example data, made relative to today.</p>
+    </aside>
+
+    <main class="preview">
+      <div class="phone" id="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span id="clock" class="num">9:41</span><span>LTE · 87%</span></div>
+        <div class="screen" id="screen"></div>
+        <div class="tabbar" id="tabbar"></div>
+        <div id="sheet-root"></div>
+        <div id="toast-root"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+// ----- helpers -----
+const DAY = 86400000;
+
+// today at midnight so day maths is easy
+const TODAY = new Date();
+TODAY.setHours(0, 0, 0, 0);
+
+function addDays(date, n) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+function daysBetween(a, b) {
+  return Math.round((b - a) / DAY);
+}
+function sameDay(a, b) {
+  return a.toDateString() === b.toDateString();
+}
+function shortDate(d) {
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+}
+function longDate(d) {
+  return d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+}
+// "15:30" -> "3:30 PM"
+function timeLabel(t) {
+  const [h, m] = t.split(":").map(Number);
+  return (h % 12 || 12) + ":" + String(m).padStart(2, "0") + (h < 12 ? " AM" : " PM");
+}
+// escape user text so it can't break the HTML
+function esc(text) {
+  return String(text).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+// save settings in the browser (try/catch in case storage is blocked)
+function load(key, fallback) {
+  try { const v = localStorage.getItem("lumenstru_" + key); return v ? JSON.parse(v) : fallback; }
+  catch (e) { return fallback; }
+}
+function save(key, value) {
+  try { localStorage.setItem("lumenstru_" + key, JSON.stringify(value)); } catch (e) { /* ignore */ }
+}
+
+// ----- example data (relative to today) -----
+const PERIOD_LENGTH = 5;
+const USER_NAME = "Sameeha";
+
+// example periods: cycles of 29, 31, 28 and 30 days, last one started 12 days ago
+let periodStarts = [];
+(function makePeriods() {
+  const gaps = [29, 31, 28, 30];
+  let start = addDays(TODAY, -12);
+  periodStarts.unshift(start);
+  for (let i = gaps.length - 1; i >= 0; i--) {
+    start = addDays(start, -gaps[i]);
+    periodStarts.unshift(start);
+  }
+})();
+
+let tasks = [
+  { name: "Finish OS lab report", due: 0, hard: true, done: false },
+  { name: "Read chapter 6 - Databases", due: 0, hard: false, done: true },
+  { name: "Revise for AI quiz", due: 3, hard: true, done: false },
+  { name: "Group meeting notes", due: 5, hard: false, done: false },
+  { name: "Dissertation draft - methods", due: 9, hard: true, done: false },
+];
+
+// weekday: 0 = Sunday ... 6 = Saturday
+let classes = load("classes", [
+  { name: "Machine Learning", weekday: 1, time: "09:00", room: "Room 2.14", note: "Bring laptop" },
+  { name: "Software Engineering", weekday: 1, time: "13:00", room: "Lab B", note: "" },
+  { name: "Databases", weekday: 2, time: "10:00", room: "Room 1.05", note: "Take the assignment" },
+  { name: "Final Year Project", weekday: 3, time: "11:00", room: "Supervisor office", note: "" },
+  { name: "Computer Networks", weekday: 4, time: "09:30", room: "Room 3.02", note: "" },
+  { name: "Machine Learning lab", weekday: 4, time: "14:00", room: "Lab A", note: "" },
+  { name: "Ethics in Computing", weekday: 5, time: "12:00", room: "Lecture hall 1", note: "" },
+]);
+
+// each notification has its own time
+let notifications = load("notifications", {
+  dnd: false,
+  hydration: { on: true, time: "10:00" },
+  rest: { on: true, time: "13:00" },
+  task: { on: true, time: "15:30" },
+  period: { on: true, time: "09:00" },
+  weekly: { on: true, time: "18:00" },
+  classMinutes: 20,
+  classOn: true,
+});
+
+let resolved = [];  // reminders done today
+let chat = [{ me: false, text: "Hi " + USER_NAME + ". Ask me about your cycle, your energy or what to study today." }];
+let logDraft = { flow: "", pain: "", symptoms: [], mood: "" };
+
+// ----- period prediction -----
+// Linear regression trained in Python on open cycle data (Stanford and Najmabadi, 2023).
+// Inputs are the user's own last 3 cycle lengths.
+const MODEL = {
+  intercept: 6.8291,
+  last: 0.0495,
+  mean3: 0.7184,
+  spread3: -0.0252
+};
+
+function cycleLengths() {
+  const sorted = periodStarts.slice().sort((a, b) => a - b);
+  const lengths = [];
+  for (let i = 1; i < sorted.length; i++) {
+    const gap = daysBetween(sorted[i - 1], sorted[i]);
+    if (gap >= 15 && gap <= 60) lengths.push(gap); // under 15 / over 60 = a missed log
+  }
+  return lengths;
+}
+
+function predict() {
+  const sorted = periodStarts.slice().sort((a, b) => a - b);
+  const lastStart = sorted[sorted.length - 1];
+  const lengths = cycleLengths();
+  const result = { lastStart, lengths, cycleLength: 28, range: 3 };
+
+  if (lengths.length >= 3) {
+    const last3 = lengths.slice(-3);
+    const last = last3[2];
+    const mean3 = (last3[0] + last3[1] + last3[2]) / 3;
+    const spread3 = Math.max(...last3) - Math.min(...last3);
+    const predicted = MODEL.intercept + MODEL.last * last + MODEL.mean3 * mean3 + MODEL.spread3 * spread3;
+    result.cycleLength = Math.min(60, Math.max(15, Math.round(predicted)));
+    result.range = Math.max(2, Math.floor(spread3 / 2));
+  } else if (lengths.length > 0) {
+    result.cycleLength = Math.round(lengths.reduce((a, b) => a + b, 0) / lengths.length);
+  }
+
+  result.nextStart = addDays(lastStart, result.cycleLength);
+  if (result.nextStart <= TODAY) result.nextStart = addDays(TODAY, 1); // late: any day now
+  result.cycleDay = daysBetween(lastStart, TODAY) + 1;
+  return result;
+}
+
+// phase and energy for a day (same rules as the Android app)
+function dayInfo(date) {
+  const p = predict();
+  const sorted = periodStarts.slice().sort((a, b) => a - b);
+  let start = null;
+  for (const s of sorted) if (s <= date) start = s;
+
+  // future days: step forward by the predicted cycle length
+  if (date > TODAY) {
+    start = p.lastStart;
+    let next = p.nextStart;
+    while (next <= date) { start = next; next = addDays(next, p.cycleLength); }
+  }
+  if (!start) return { phase: null, energy: 2, period: false, predicted: false };
+
+  const cycleDay = daysBetween(start, date) + 1;
+  const inPeriod = cycleDay <= PERIOD_LENGTH;
+  const ovulation = p.cycleLength - 14;
+  let phase = "Luteal";
+  if (inPeriod) phase = "Menstrual";
+  else if (cycleDay < ovulation - 1) phase = "Follicular";
+  else if (cycleDay <= ovulation + 1) phase = "Ovulatory";
+
+  let energy = 2;
+  if (phase === "Follicular" || phase === "Ovulatory") energy = 3;
+  if (cycleDay <= 2) energy = 1;
+  if (phase === "Luteal" && p.cycleLength - cycleDay <= 2) energy = 1;
+
+  return {
+    phase, energy, cycleDay,
+    period: inPeriod && date <= TODAY,
+    predicted: inPeriod && date > TODAY,
+    fertile: phase === "Ovulatory",
+  };
+}
+
+// ----- icons (same set as the app) -----
+const ICON = {
+  home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9v10a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1V9"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  tasks: '<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M7.5 12l2.7 2.7L16.5 8.5"/>',
+  calm: '<path d="M20 13.5A8.5 8.5 0 1 1 10.5 4a7 7 0 0 0 9.5 9.5Z"/>',
+  profile: '<circle cx="12" cy="8.3" r="3.6"/><path d="M4.8 20c1-3.6 4-5.6 7.2-5.6s6.2 2 7.2 5.6"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v4.8l3.2 2"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  bell: '<path d="M6 10a6 6 0 1 1 12 0v4.2l1.6 2.6H4.4L6 14.2Z"/><path d="M10 19a2 2 0 0 0 4 0"/>',
+  spark: '<path d="M12 3l1.3 3.7L17 8l-3.7 1.3L12 13l-1.3-3.7L7 8l3.7-1.3L12 3Z"/><path d="M18.5 14l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2Z"/>',
+  back: '<path d="M15 5 8 12l7 7"/>',
+  next: '<path d="M9 5l7 7-7 7"/>',
+  heart: '<path d="M12 20s-7.5-4.6-9.4-9.3C1.4 7.2 3.6 4 7 4c2 0 3.7 1.1 5 3 1.3-1.9 3-3 5-3 3.4 0 5.6 3.2 4.4 6.7C19.5 15.4 12 20 12 20Z"/>',
+  drop: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>',
+  login: '<path d="M10 17l5-5-5-5M4 12h11"/><path d="M20 4v16"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+};
+function icon(name) {
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICON[name] + "</svg>";
+}
+
+// ----- Navigation -----
+// [screen, icon, label]
+const NAV_ITEMS = [
+  ["signin", "login", "Sign In"],
+  ["dashboard", "home", "Dashboard"],
+  ["calendar", "calendar", "Calendar"],
+  ["logPeriod", "drop", "Log Period"],
+  ["tasks", "tasks", "Tasks"],
+  ["addTask", "plus", "Add Task"],
+  ["timetable", "clock", "Timetable"],
+  ["calm", "calm", "Calm Space"],
+  ["ai", "spark", "AI Assistant"],
+  ["reminders", "bell", "Reminders"],
+  ["notifications", "bell", "Notification Settings"],
+  ["insights", "chart", "Insights"],
+  ["profile", "profile", "Profile"],
+];
+const TABS = [
+  ["dashboard", "home", "Dashboard"],
+  ["calendar", "calendar", "Calendar"],
+  ["tasks", "tasks", "Tasks"],
+  ["calm", "calm", "Calm"],
+  ["profile", "profile", "Profile"],
+];
+// which bottom tab stays highlighted for inner screens
+const TAB_FOR = { logPeriod: "dashboard", addTask: "tasks", timetable: "tasks", ai: "dashboard", reminders: "dashboard", insights: "profile" };
+
+let screen = "dashboard";
+let selectedDate = new Date(TODAY);
+let calendarMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
+let timetableDay = TODAY.getDay();
+
+function go(name) {
+  closeSheet();
+  if (name === "notifications") { openNotifications(); renderDevNav("notifications"); return; }
+  screen = name;
+  render();
+  document.getElementById("screen").scrollTop = 0;
+}
+
+function render() {
+  const screens = {
+    signin: signInScreen, dashboard: dashboardScreen, calendar: calendarScreen, logPeriod: logPeriodScreen,
+    tasks: tasksScreen, addTask: addTaskScreen, timetable: timetableScreen, calm: calmScreen,
+    ai: aiScreen, reminders: remindersScreen, insights: insightsScreen, profile: profileScreen,
+  };
+  document.getElementById("screen").innerHTML = screens[screen]();
+  renderTabs();
+  renderDevNav(screen);
+}
+
+function renderDevNav(active) {
+  document.getElementById("devnav").innerHTML = NAV_ITEMS.map(item =>
+    '<button class="' + (item[0] === active ? "on" : "") + '" onclick="go(\'' + item[0] + '\')">' + icon(item[1]) +
+    "<span>" + item[2] + "</span></button>"
+  ).join("");
+}
+
+function renderTabs() {
+  const bar = document.getElementById("tabbar");
+  bar.hidden = screen === "signin";
+  const lit = TAB_FOR[screen] || screen;
+  bar.innerHTML = TABS.map(t =>
+    '<button class="' + (t[0] === lit ? "on" : "") + '" onclick="go(\'' + t[0] + '\')">' + icon(t[1]) + t[2] + "</button>"
+  ).join("");
+}
+
+function header(title, subtitle, backTo) {
+  return '<div class="header">' +
+    (backTo ? '<button class="iconbtn" aria-label="Back" onclick="go(\'' + backTo + '\')">' + icon("back") + "</button>" : "") +
+    '<div class="grow"><h1>' + title + '</h1><p class="sub">' + subtitle + "</p></div>" +
+    '<button class="iconbtn" aria-label="Reminders" onclick="go(\'reminders\')">' + icon("bell") + "</button></div>";
+}
+
+// ----- Sign In -----
+function signInScreen() {
+  return '<div class="card center" style="background:transparent;padding-top:20px">' +
+      '<span class="mascot bob" style="--size:120px" aria-hidden="true"></span>' +
+      "<h1>Welcome to Lumenstru</h1>" +
+      '<p class="sub">A study planner that works with your cycle, not against it.</p>' +
+    "</div>" +
+    '<form class="card" onsubmit="event.preventDefault(); go(\'dashboard\'); toast(\'Signed in\', \'Your data is saved to your account.\')">' +
+      '<label class="field" for="si-email">Email<input id="si-email" type="email" placeholder="you@example.com" value="sameeha@example.com"></label>' +
+      '<label class="field" for="si-pass">Password<input id="si-pass" type="password" placeholder="At least 6 characters" value="password1"></label>' +
+      '<button class="btn block" type="submit">Sign in</button>' +
+      '<div class="row between"><button type="button" class="link" onclick="toast(\'Forgot password\', \'A reset link is sent to your email.\')">Forgot password?</button>' +
+      '<button type="button" class="link" onclick="toast(\'Create account\', \'Email, password and confirm password.\')">Create account</button></div>' +
+    "</form>" +
+    '<p class="small" style="text-align:center">or</p>' +
+    '<button class="btn ghost block" onclick="go(\'dashboard\')">Continue with Google</button>' +
+    '<button class="btn ghost block" onclick="go(\'dashboard\')">Skip, keep my data on this phone</button>';
+}
+
+// ----- Dashboard -----
+function cycleRing(p, info) {
+  const r = 92, c = 2 * Math.PI * r;
+  const progress = Math.min(1, p.cycleDay / p.cycleLength);
+  const daysLeft = daysBetween(TODAY, p.nextStart);
+  const onPeriod = p.cycleDay <= PERIOD_LENGTH;
+  const label = onPeriod ? "PERIOD DAY" : "PERIOD IN";
+  const big = onPeriod ? p.cycleDay : daysLeft;
+  const unit = onPeriod ? "of about " + PERIOD_LENGTH : (daysLeft === 1 ? "day" : "days");
+  const periodPart = PERIOD_LENGTH / p.cycleLength;  // the rose arc for the period days
+  const dotX = 105 + r * Math.sin(2 * Math.PI * progress);
+  const dotY = 105 - r * Math.cos(2 * Math.PI * progress);
+
+  return '<div class="ring-wrap">' +
+    '<svg width="210" height="210" viewBox="0 0 210 210" role="img" aria-label="Cycle day ' + p.cycleDay + " of " + p.cycleLength + '">' +
+      '<g transform="rotate(-90 105 105)">' +
+        '<circle cx="105" cy="105" r="' + r + '" fill="none" stroke="var(--line)" stroke-width="5"/>' +
+        '<circle cx="105" cy="105" r="' + r + '" fill="none" stroke="var(--rose)" stroke-width="5" stroke-dasharray="' + (c * periodPart) + " " + c + '" stroke-linecap="round"/>' +
+        '<circle cx="105" cy="105" r="' + r + '" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="' + (c * progress) + " " + c + '"/>' +
+      "</g>" +
+      '<circle cx="' + dotX + '" cy="' + dotY + '" r="6" fill="var(--primary)"/>' +
+    "</svg>" +
+    '<div class="ring-text"><span class="label">' + label + '</span><span class="big num">' + big + '</span>' +
+      '<span class="small">' + unit + '</span><span class="phase">' + info.phase + "</span></div>" +
+  "</div>";
+}
+
+function dashboardScreen() {
+  const p = predict();
+  const info = dayInfo(TODAY);
+  const todaysClasses = classes.filter(c => c.weekday === TODAY.getDay()).sort((a, b) => a.time.localeCompare(b.time));
+  const todaysTasks = tasks.filter(t => t.due === 0);
+
+  // 7-day study forecast
+  let bars = "";
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(TODAY, i);
+    const e = dayInfo(d).energy;
+    bars += '<div class="bar"><span class="fill ' + (e === 1 ? "low" : "") + '" style="height:' + (e * 27) + 'px"></span>' +
+      (i === 0 ? "Today" : d.toLocaleDateString("en-GB", { weekday: "short" })) + "</div>";
+  }
+
+  return header("Hi, " + USER_NAME, "Current phase: " + info.phase) +
+    cycleRing(p, info) +
+    '<button class="next-chip" onclick="go(\'calendar\')">' + icon("calendar") +
+      "Next period " + shortDate(p.nextStart) + " · likely " + shortDate(addDays(p.nextStart, -p.range)) + "–" + shortDate(addDays(p.nextStart, p.range)) + "</button>" +
+    '<button class="quicklog" onclick="go(\'logPeriod\')"><span class="plus">+</span><span><b>Log today</b><br><span style="opacity:.8;font-size:13px">Flow, symptoms &amp; mood</span></span></button>' +
+
+    checkInCard() +
+
+    '<div class="tiles">' +
+      '<button class="tile" onclick="go(\'tasks\')"><span class="circle">' + icon("tasks") + "</span>Tasks</button>" +
+      '<button class="tile" onclick="go(\'addTask\')"><span class="circle">' + icon("plus") + "</span>Add Task</button>" +
+      '<button class="tile" onclick="go(\'ai\')"><span class="circle">' + icon("spark") + "</span>Ask AI</button>" +
+      '<button class="tile" onclick="go(\'reminders\')"><span class="circle">' + icon("bell") + "</span>Reminders</button>" +
+    "</div>" +
+
+    '<section class="card"><div class="row between"><h3>Study forecast</h3><span class="example">Rose = low energy</span></div>' +
+      '<div class="bars">' + bars + "</div>" +
+      '<p class="small">' + (info.energy === 3 ? "High energy today. A good day for your hardest task." : info.energy === 1 ? "A lower-energy day. Keep tasks light and rest well." : "A steady day. Take a 10-minute break after each hour.") + "</p>" +
+    "</section>" +
+
+    '<section class="card">' +
+      '<div class="row between"><span class="label">Today\'s classes</span>' +
+      '<button class="btn ghost small" onclick="go(\'timetable\')">Open timetable</button></div>' +
+      (todaysClasses.length === 0
+        ? '<p class="small">No classes today. Add your weekly classes once and get an alarm before each one.</p>'
+        : todaysClasses.map((c, i) => (i ? "<hr>" : "") + classRow(c)).join("")) +
+    "</section>" +
+
+    '<section class="card"><div class="row between"><h3>Today\'s tasks</h3><button class="btn ghost small" onclick="go(\'addTask\')">+ Add</button></div>' +
+      (todaysTasks.map(taskRow).join("") || '<p class="small">Nothing due today.</p>') +
+    "</section>";
+}
+
+// one-tap daily check-in
+let checkIn = "";
+function checkInCard() {
+  const replies = { Great: "Love that! A good day for your hardest task.", Okay: "Steady is good. Take a break each hour.", Low: "Thanks for telling me. Today is planned as a lighter day." };
+  return '<section class="card"><div class="row"><span class="mascot bob" style="--size:62px" aria-hidden="true"></span>' +
+    '<div class="grow"><h3>' + (checkIn ? replies[checkIn] : "How are you today?") + "</h3>" +
+    (checkIn ? '<p class="small">Checked in: ' + checkIn + "</p>" : '<p class="small">One tap to check in</p>') + "</div></div>" +
+    (checkIn ? "" : '<div class="chips">' + ["Great", "Okay", "Low"].map(m => '<button class="chip" onclick="doCheckIn(\'' + m + '\')">' + m + "</button>").join("") + "</div>") +
+  "</section>";
+}
+function doCheckIn(mood) {
+  checkIn = mood;
+  render();
+}
+
+function classRow(c) {
+  return '<div class="class-row"><span class="time num">' + c.time + '</span><div class="grow">' +
+    "<div><b>" + esc(c.name) + "</b></div>" +
+    '<div class="small">' + esc(c.room) + " · alarm at " + alarmTime(c.time) + "</div>" +
+    (c.note ? '<div class="note">Note: ' + esc(c.note) + "</div>" : "") +
+  "</div></div>";
+}
+
+// "10:00" -> "09:40" when the class alarm is 20 minutes before
+function alarmTime(time) {
+  const [h, m] = time.split(":").map(Number);
+  const total = (h * 60 + m - notifications.classMinutes + 1440) % 1440;
+  return String(Math.floor(total / 60)).padStart(2, "0") + ":" + String(total % 60).padStart(2, "0");
+}
+
+function taskRow(t) {
+  const i = tasks.indexOf(t);
+  const dueDay = addDays(TODAY, t.due);
+  const low = dayInfo(dueDay).energy === 1;
+  return '<label class="task ' + (t.done ? "done" : "") + '"><input type="checkbox" ' + (t.done ? "checked" : "") + ' onchange="toggleTask(' + i + ')">' +
+    '<span class="grow name">' + esc(t.name) + "</span>" +
+    '<span class="pill ' + (low && t.hard ? "low" : "") + '">' + (t.due === 0 ? "Today" : shortDate(dueDay)) + (t.hard ? " · hard" : "") + "</span></label>";
+}
+function toggleTask(i) {
+  tasks[i].done = !tasks[i].done;
+  render();
+}
+
+// ----- Calendar -----
+function calendarScreen() {
+  const p = predict();
+  const year = calendarMonth.getFullYear(), month = calendarMonth.getMonth();
+  const first = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const offset = (first.getDay() + 6) % 7; // weeks start on Monday
+
+  let grid = ["M", "T", "W", "T", "F", "S", "S"].map(d => '<div class="dow">' + d + "</div>").join("");
+  for (let i = 0; i < offset; i++) grid += "<div></div>";
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, month, d);
+    const info = dayInfo(date);
+    let cls = "day";
+    if (info.period) cls += " period";
+    if (info.predicted) cls += " predicted";
+    if (info.fertile && !info.period && !info.predicted) cls += " fertile";
+    if (sameDay(date, TODAY)) cls += " today";
+    if (sameDay(date, selectedDate)) cls += " selected";
+    grid += '<button class="' + cls + ' num" onclick="selectDay(' + date.getTime() + ')">' + d + "</button>";
+  }
+
+  const sel = dayInfo(selectedDate);
+  const isStart = periodStarts.some(s => sameDay(s, selectedDate));
+
+  return header("Calendar", "Past and expected periods") +
+    '<div class="row between"><button class="iconbtn" aria-label="Previous month" onclick="moveMonth(-1)">' + icon("back") + "</button>" +
+      "<h2>" + first.toLocaleDateString("en-GB", { month: "long", year: "numeric" }) + "</h2>" +
+      '<button class="iconbtn" aria-label="Next month" onclick="moveMonth(1)">' + icon("next") + "</button></div>" +
+    '<div class="month">' + grid + "</div>" +
+    '<div class="legend"><span><i class="dot" style="background:var(--rose)"></i>Period</span>' +
+      '<span><i class="dot" style="border:1.5px dashed var(--rose)"></i>Predicted</span>' +
+      '<span><i class="dot" style="background:var(--primary)"></i>Fertile window</span></div>' +
+
+    '<section class="card"><span class="label">' + longDate(selectedDate) + "</span>" +
+      "<p>" + (sel.phase ? sel.phase + " phase · cycle day " + sel.cycleDay : "Before your first logged period") + "</p>" +
+      (selectedDate <= TODAY
+        ? '<button class="btn ' + (isStart ? "ghost" : "rose") + ' small" onclick="togglePeriodStart()">' + (isStart ? "Remove this period" : "Mark a period starting this day") + "</button>"
+        : '<p class="small">Future day. Predictions update when you log a new period.</p>') +
+    "</section>" +
+
+    '<section class="card"><h3>Next period</h3>' +
+      "<p>Around <b>" + shortDate(p.nextStart) + "</b>, most likely " + shortDate(addDays(p.nextStart, -p.range)) + "–" + shortDate(addDays(p.nextStart, p.range)) + ".</p>" +
+    "</section>";
+}
+
+function selectDay(ms) {
+  selectedDate = new Date(ms);
+  render();
+}
+function moveMonth(n) {
+  calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + n, 1);
+  render();
+}
+function togglePeriodStart() {
+  const i = periodStarts.findIndex(s => sameDay(s, selectedDate));
+  if (i >= 0) {
+    if (periodStarts.length === 1) { toast("Can't remove", "At least one period is needed for predictions."); return; }
+    periodStarts.splice(i, 1);
+  } else {
+    periodStarts.push(new Date(selectedDate));
+  }
+  const p = predict();
+  render();
+  toast("Prediction updated", "Next period around " + shortDate(p.nextStart) + ".");
+}
+
+// ----- Log Period -----
+function chipGroup(field, options, multi) {
+  return '<div class="chips">' + options.map(o => {
+    const on = multi ? logDraft[field].includes(o) : logDraft[field] === o;
+    return '<button class="chip rose ' + (on ? "on" : "") + '" onclick="pickLog(\'' + field + "', '" + o + "', " + multi + ')">' + o + "</button>";
+  }).join("") + "</div>";
+}
+function pickLog(field, value, multi) {
+  if (multi) {
+    const list = logDraft[field];
+    const i = list.indexOf(value);
+    if (i >= 0) list.splice(i, 1); else list.push(value);
+  } else {
+    logDraft[field] = logDraft[field] === value ? "" : value;
+  }
+  render();
+}
+
+function logPeriodScreen() {
+  const onPeriod = dayInfo(TODAY).period;
+  return header("Log Period", longDate(TODAY), "dashboard") +
+    '<section class="card"><span class="label">Flow</span>' + chipGroup("flow", ["Spotting", "Light", "Medium", "Heavy"], false) + "</section>" +
+    '<section class="card"><span class="label">Pain</span>' + chipGroup("pain", ["None", "Mild", "Moderate", "Severe"], false) +
+      (logDraft.pain === "Severe" ? '<p class="note">Today becomes a low-energy day and Lumenstru offers to move hard tasks.</p>' : "") + "</section>" +
+    '<section class="card"><span class="label">Symptoms</span>' + chipGroup("symptoms", ["Cramps", "Headache", "Bloating", "Tired", "Back pain", "Acne"], true) + "</section>" +
+    '<section class="card"><span class="label">Mood</span>' + chipGroup("mood", ["Calm", "Happy", "Low", "Anxious", "Irritable"], false) + "</section>" +
+    '<button class="btn block" onclick="saveLog()">' + (onPeriod ? "Save today's info" : "Save & start period today") + "</button>" +
+    '<button class="btn ghost block" onclick="go(\'calendar\')">Mark previous dates</button>';
+}
+function saveLog() {
+  if (!dayInfo(TODAY).period) periodStarts.push(new Date(TODAY));
+  logDraft = { flow: "", pain: "", symptoms: [], mood: "" };
+  go("dashboard");
+  toast("Saved", "Today's log is saved. Your predictions are updated.");
+}
+
+// ----- Tasks + Add Task -----
+function tasksScreen() {
+  const high = tasks.filter(t => dayInfo(addDays(TODAY, t.due)).energy !== 1);
+  const low = tasks.filter(t => dayInfo(addDays(TODAY, t.due)).energy === 1);
+  return header("Tasks", "Small steps count") +
+    '<button class="btn block" onclick="go(\'addTask\')">+ Add a task</button>' +
+    '<p class="small">Hard tasks due on low-energy days are planned on a better day for you, automatically.</p>' +
+    '<span class="label">High-energy days</span><section class="card">' + (high.map(taskRow).join("") || '<p class="small">Nothing here.</p>') + "</section>" +
+    '<span class="label">Low-energy days</span><section class="card">' + (low.map(taskRow).join("") || '<p class="small">No tasks fall on low-energy days.</p>') + "</section>";
+}
+
+function addTaskScreen() {
+  return header("Add Task", "Lumenstru checks your energy on the due day", "tasks") +
+    '<form class="card" onsubmit="addTask(event)">' +
+      '<label class="field" for="t-name">Task name<input id="t-name" placeholder="e.g. Revise for AI quiz" required></label>' +
+      '<label class="field" for="t-due">Due in<select id="t-due">' +
+        [0, 1, 2, 3, 5, 7, 10, 14].map(d => '<option value="' + d + '">' + (d === 0 ? "Today" : shortDate(addDays(TODAY, d)) + " (" + d + " days)") + "</option>").join("") +
+      "</select></label>" +
+      '<label class="field" for="t-hard">How hard is it?<select id="t-hard"><option value="0">Easy</option><option value="1">Hard</option></select></label>' +
+      '<button class="btn block" type="submit">Save task</button>' +
+    "</form>";
+}
+function addTask(e) {
+  e.preventDefault();
+  const name = document.getElementById("t-name").value.trim();
+  if (!name) return;
+  const due = Number(document.getElementById("t-due").value);
+  const hard = document.getElementById("t-hard").value === "1";
+  tasks.push({ name, due, hard, done: false });
+  go("tasks");
+  const low = dayInfo(addDays(TODAY, due)).energy === 1;
+  toast("Task added", hard && low ? "It is due on a low-energy day, so Lumenstru will plan it on a better day for you." : name + " is on your list.");
+}
+
+// ----- Timetable -----
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function timetableScreen() {
+  const order = [1, 2, 3, 4, 5, 6, 0]; // Monday first
+  const chips = order.map(d => {
+    const count = classes.filter(c => c.weekday === d).length;
+    return '<button class="chip ' + (d === timetableDay ? "on" : "") + '" onclick="pickDay(' + d + ')">' + DAY_NAMES[d] + (count ? " · " + count : "") + "</button>";
+  }).join("");
+  const list = classes.filter(c => c.weekday === timetableDay).sort((a, b) => a.time.localeCompare(b.time));
+
+  return header("Timetable", "Add classes once, they repeat every week", "dashboard") +
+    '<div class="chips">' + chips + "</div>" +
+    '<section class="card">' +
+      (list.length === 0 ? '<p class="small">No classes on this day.</p>'
+        : list.map((c, i) => (i ? "<hr>" : "") + '<div class="row"><div class="grow">' + classRow(c) + "</div>" +
+            '<button class="link" onclick="removeClass(' + classes.indexOf(c) + ')">Remove</button></div>').join("")) +
+    "</section>" +
+    '<section class="card"><h3>Add a class</h3>' +
+      '<form class="form-grid" onsubmit="addClass(event)">' +
+        '<input class="full" id="c-name" placeholder="Class name, e.g. Databases" aria-label="Class name" required>' +
+        '<div class="full"><span class="label">Days (tap all that apply)</span><div class="chips" style="margin-top:6px">' +
+          order.map(d => '<button type="button" class="chip ' + (newClassDays.includes(d) ? "on" : "") + '" onclick="toggleNewClassDay(' + d + ')">' + DAY_NAMES[d] + "</button>").join("") +
+        "</div></div>" +
+        '<input class="full" id="c-time" type="time" value="09:00" aria-label="Time" required>' +
+        '<input class="full" id="c-room" placeholder="Room (optional)" aria-label="Room">' +
+        '<input class="full" id="c-note" placeholder="Note for the alarm, e.g. Take the assignment" aria-label="Note">' +
+        '<button class="btn full" type="submit">Add class</button>' +
+      "</form>" +
+      '<p class="small">An alarm rings ' + notifications.classMinutes + ' minutes before each class. <button class="link" onclick="openNotifications()">Change</button></p>' +
+    "</section>";
+}
+function pickDay(d) {
+  timetableDay = d;
+  newClassDays = [d];
+  render();
+}
+
+// days picked in the Add a class form (a class can be on more than one day)
+let newClassDays = [TODAY.getDay()];
+function toggleNewClassDay(d) {
+  // render() redraws the form, so keep what was typed
+  const ids = ["c-name", "c-room", "c-note", "c-time"];
+  const typed = ids.map(id => document.getElementById(id).value);
+  const i = newClassDays.indexOf(d);
+  if (i >= 0) newClassDays.splice(i, 1); else newClassDays.push(d);
+  render();
+  ids.forEach((id, n) => { document.getElementById(id).value = typed[n]; });
+}
+function addClass(e) {
+  e.preventDefault();
+  const name = document.getElementById("c-name").value.trim();
+  if (!name) return;
+  if (newClassDays.length === 0) { toast("Pick a day", "Tap at least one day for this class."); return; }
+  const time = document.getElementById("c-time").value;
+  const room = document.getElementById("c-room").value.trim() || "No room set";
+  const note = document.getElementById("c-note").value.trim();
+
+  const picked = [1, 2, 3, 4, 5, 6, 0].filter(d => newClassDays.includes(d));
+  for (const d of picked) {
+    classes.push({ name, weekday: d, time, room, note });
+  }
+  save("classes", classes);
+  timetableDay = picked[0];
+  render();
+  toast("Class added", name + " on " + picked.map(d => DAY_NAMES[d]).join(", ") + " at " + time + ". Alarm at " + alarmTime(time) + ".");
+}
+function removeClass(i) {
+  const name = classes[i].name;
+  classes.splice(i, 1);
+  save("classes", classes);
+  render();
+  toast("Class removed", name + " was removed from your timetable.");
+}
+
+// ----- Calm Space -----
+let breathTimer = null;
+function calmScreen() {
+  return header("Calm Space", "A few quiet minutes") +
+    '<section class="card center">' +
+      '<div class="breath" id="breath">Ready</div>' +
+      '<p class="small">Breathe in for 4, hold for 4, out for 6.</p>' +
+      '<button class="btn" id="breath-btn" onclick="toggleBreathing()">' + (breathTimer ? "Stop" : "Start breathing") + "</button>" +
+    "</section>" +
+    '<section class="card"><h3>Gentle stretches</h3><p class="small">Neck tilt, side bend, shoulder rolls, cat-cow and child\'s pose, each with a moving guide.</p></section>' +
+    '<section class="card"><h3>Calm music</h3><p class="small">Rain, soft piano and ocean waves keep playing when you leave the app.</p></section>';
+}
+function toggleBreathing() {
+  if (breathTimer) {
+    clearTimeout(breathTimer);
+    breathTimer = null;
+    render();
+    return;
+  }
+  const steps = [["Breathe in", 4000, true], ["Hold", 4000, true], ["Breathe out", 6000, false]];
+  let i = 0;
+  function next() {
+    const circle = document.getElementById("breath");
+    if (!circle) { breathTimer = null; return; } // left the screen
+    circle.textContent = steps[i][0];
+    circle.classList.toggle("in", steps[i][2]);
+    breathTimer = setTimeout(next, steps[i][1]);
+    i = (i + 1) % steps.length;
+  }
+  document.getElementById("breath-btn").textContent = "Stop";
+  next();
+}
+
+// ----- AI Assistant (rule-based, uses the user's own data) -----
+function aiScreen() {
+  return header("AI Assistant", "Answers from your own data", "dashboard") +
+    '<div class="chat" id="chat">' + chat.map(m => '<div class="msg ' + (m.me ? "me" : "bot") + '">' + esc(m.text) + "</div>").join("") + "</div>" +
+    '<div class="chips">' +
+      ["When is my next period?", "What phase am I in?", "What should I study today?"].map(q => '<button class="chip" onclick="ask(\'' + q + '\')">' + q + "</button>").join("") +
+    "</div>" +
+    '<form class="row" onsubmit="event.preventDefault(); ask(document.getElementById(\'ai-input\').value)">' +
+      '<input id="ai-input" placeholder="Type your message" aria-label="Message"><button class="btn small" type="submit">Send</button>' +
+    "</form>";
+}
+function ask(question) {
+  if (!question.trim()) return;
+  chat.push({ me: true, text: question });
+  chat.push({ me: false, text: answer(question.toLowerCase()) });
+  render();
+  const box = document.getElementById("screen");
+  box.scrollTop = box.scrollHeight;
+}
+function answer(q) {
+  const p = predict();
+  const info = dayInfo(TODAY);
+  if (q.includes("period") || q.includes("when")) {
+    return "Your next period is expected around " + shortDate(p.nextStart) + ", most likely between " +
+      shortDate(addDays(p.nextStart, -p.range)) + " and " + shortDate(addDays(p.nextStart, p.range)) + ", learned from your own cycles.";
+  }
+  if (q.includes("phase")) {
+    return "You're on day " + p.cycleDay + ", in your " + info.phase + " phase. These are estimates, not medical predictions.";
+  }
+  if (q.includes("study") || q.includes("task")) {
+    const open = tasks.filter(t => !t.done);
+    if (open.length === 0) return "You have no open tasks. A good moment to plan ahead.";
+    const hard = open.find(t => t.hard);
+    return info.energy === 3 && hard ? "Your energy is high today, so start with \"" + hard.name + "\"." : "Start with something light, like \"" + open[0].name + "\", and take regular breaks.";
+  }
+  return "I can help with your cycle, your energy and your tasks. Try one of the suggestions below.";
+}
+
+// ----- Reminders (the Survival Suite) -----
+const REMINDERS = [
+  { key: "hydration", title: "Hydration Reminder", text: "Long study sessions use more water than you think. Keep a bottle on your desk.", action: "Got it" },
+  { key: "rest", title: "Rest Reminder", text: "Take a 10-minute break after each hour of study.", action: "Rest now" },
+  { key: "task", title: "Task Reminder", text: "You have 1 pending task for today: Finish OS lab report.", action: "View task" },
+];
+function remindersScreen() {
+  const open = REMINDERS.filter(r => notifications[r.key].on && !resolved.includes(r.key));
+  return header("Reminders", "Your Survival Suite for today", "dashboard") +
+    (open.length === 0 ? '<section class="card"><p class="small">All done for today.</p></section>' :
+      open.map(r => '<section class="card"><div class="row between"><h3>' + r.title + '</h3><span class="pill">' + timeLabel(notifications[r.key].time) + "</span></div>" +
+        '<p class="small">' + r.text + "</p>" +
+        '<button class="btn small" style="align-self:flex-start" onclick="resolveReminder(\'' + r.key + '\')">' + r.action + "</button></section>").join("")) +
+    '<button class="btn ghost block" onclick="openNotifications()">Change reminder times</button>';
+}
+function resolveReminder(key) {
+  resolved.push(key);
+  if (key === "task") { go("tasks"); return; }
+  render();
+  toast("Done", "Nice. See you at the next reminder.");
+}
+
+// ----- Insights -----
+function insightsScreen() {
+  const p = predict();
+  const lengths = p.lengths.slice(-6);
+  const maxLen = Math.max(...lengths, p.cycleLength) + 3;
+
+  // past cycles + the predicted one as a dashed bar
+  let bars = lengths.map((l, i) => '<div class="bar"><span class="num">' + l + '</span><span class="fill" style="height:' + (l / maxLen * 80) + 'px"></span>C' + (i + 1) + "</div>").join("");
+  bars += '<div class="bar"><span class="num">' + p.cycleLength + '</span><span class="fill" style="height:' + (p.cycleLength / maxLen * 80) + 'px;background:transparent;border:1.5px dashed var(--primary)"></span>Next</div>';
+
+  const spread = Math.max(...lengths) - Math.min(...lengths);
+  const learned = '<section class="card"><div class="row"><span class="mascot" style="--size:56px" aria-hidden="true"></span>' +
+    '<h3 class="grow">What Lumenstru has learned</h3></div>' +
+    '<p class="small">' + (spread <= 3 ? "Your cycle is quite regular: it changes by " + spread + " days at most." : "Your cycle changes by up to " + spread + " days, so dates are given as a range.") + "</p>" +
+    '<p class="small">Your next period will most likely start between ' + shortDate(addDays(p.nextStart, -p.range)) + " and " + shortDate(addDays(p.nextStart, p.range)) + ".</p>" +
+    '<p class="small">You usually feel best in your Follicular and Ovulatory days, so hard tasks are planned for then.</p>' +
+    "</section>";
+
+  return header("Insights", "What Lumenstru has learned about you", "profile") +
+    '<div class="row" style="align-items:flex-start;gap:18px">' +
+      '<div><span class="label">Cycle day</span><div class="hero-num num">' + p.cycleDay + '</div><span class="note" style="font-family:var(--serif);font-style:italic">' + dayInfo(TODAY).phase + " phase</span></div>" +
+      '<div class="kv grow"><span>' + "Your cycle" + '</span><span class="num">' + p.cycleLength + " days</span>" +
+        '<span>Period</span><span class="num">' + PERIOD_LENGTH + " days</span>" +
+        '<span>Next period</span><span class="num">' + shortDate(p.nextStart) + "</span>" +
+        '<span>Periods logged</span><span class="num">' + periodStarts.length + "</span></div>" +
+    "</div>" +
+    '<section class="card"><h3>Cycle length</h3><p class="small">Days from one period to the next. The dashed bar is the prediction.</p><div class="bars">' + bars + "</div></section>" +
+    learned;
+}
+
+// ----- Profile -----
+function profileScreen() {
+  const p = predict();
+  const row = (iconName, label, action, extra) => '<button class="setting" onclick="' + action + '">' + icon(iconName) +
+    '<span class="grow">' + label + "</span>" + (extra ? '<span class="small">' + extra + "</span>" : "") + '<span class="chev">›</span></button>';
+  return header("Profile", "Make Lumenstru feel like yours") +
+    '<div class="row"><span class="mascot" style="--size:72px" aria-hidden="true"></span><div><h2>' + USER_NAME + '</h2><p class="small">Saved on this phone · example profile</p></div></div>' +
+    '<div class="group">' +
+      row("heart", "My Cycle &amp; Insights", "go('insights')", p.cycleLength + "-day cycle") +
+      row("clock", "Class Timetable", "go('timetable')", classes.length + " classes") +
+      row("tasks", "Reminders", "go('reminders')") +
+      row("bell", "Notification Settings", "openNotifications()") +
+    "</div>" +
+    '<div class="group">' +
+      '<div class="setting">' + icon("calm") + '<label class="grow" for="p-dark">Lavender (dark) mode</label>' +
+        '<input type="checkbox" class="switch" id="p-dark" ' + (isDark() ? "checked" : "") + ' onchange="setMode(this.checked ? \'dark\' : \'light\')"></div>' +
+      row("login", "Sign out", "go('signin')") +
+    "</div>";
+}
+
+// ----- Matcha / Lavender mode -----
+let mode = load("mode", "system");
+function isDark() {
+  if (mode === "system") return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  return mode === "dark";
+}
+function setMode(m) {
+  mode = m;
+  save("mode", m);
+  document.documentElement.setAttribute("data-theme", m);
+  document.getElementById("btn-matcha").classList.toggle("on", !isDark());
+  document.getElementById("btn-lavender").classList.toggle("on", isDark());
+  render();
+}
+
+// ----- Notification Settings sheet -----
+const NOTIFICATION_ROWS = [
+  { key: "hydration", label: "Hydration", text: "Time to drink water. Long study sessions use more water than you think." },
+  { key: "rest", label: "Rest", text: "Take a 10-minute break. Rest is part of the plan." },
+  { key: "task", label: "Tasks", text: "You have 1 pending task for today: Finish OS lab report." },
+  { key: "period", label: "Period alerts", text: "Your period may start in about 2 days. Pack pads or a cup and get ahead on harder tasks." },
+  { key: "weekly", label: "Weekly summary (Sun)", text: "5 tasks done · 6.5 h studied · 4-day streak · Luteal phase" },
+];
+
+function openNotifications() {
+  const n = notifications;
+  const rows = NOTIFICATION_ROWS.map(r =>
+    '<div class="setting"><label class="grow" for="t-' + r.key + '">' + r.label + "</label>" +
+      '<input type="time" id="t-' + r.key + '" value="' + n[r.key].time + '" onchange="setTime(\'' + r.key + '\', this.value)">' +
+      '<input type="checkbox" class="switch" ' + (n[r.key].on ? "checked" : "") + ' onchange="setOn(\'' + r.key + '\', this.checked)" aria-label="' + r.label + ' on or off">' +
+    "</div>"
+  ).join("");
+  const minuteOptions = [5, 10, 15, 20, 30, 45, 60].map(m => '<option value="' + m + '"' + (m === n.classMinutes ? " selected" : "") + ">" + m + " min before</option>").join("");
+
+  document.getElementById("sheet-root").innerHTML =
+    '<div class="overlay" onclick="if (event.target === this) closeSheet()">' +
+      '<div class="sheet" role="dialog" aria-label="Notification Settings"><div class="handle"></div>' +
+        "<h2>Notification Settings</h2>" +
+        '<div class="group"><div class="setting"><label class="grow" for="s-dnd">Do Not Disturb</label>' +
+          '<input type="checkbox" class="switch" id="s-dnd" ' + (n.dnd ? "checked" : "") + ' onchange="setDnd(this.checked)"></div></div>' +
+        '<p class="small">Tap a time to change it.</p>' +
+        '<div class="group">' + rows +
+          '<div class="setting"><label class="grow" for="t-class">Class alarms</label>' +
+            '<select id="t-class" onchange="setClassMinutes(this.value)">' + minuteOptions + "</select>" +
+            '<input type="checkbox" class="switch" ' + (n.classOn ? "checked" : "") + ' onchange="setOn(\'class\', this.checked)" aria-label="Class alarms on or off">' +
+          "</div>" +
+        "</div>" +
+        '<span class="label">Preview a notification</span>' +
+        '<div class="chips">' + NOTIFICATION_ROWS.map(r => '<button class="chip" onclick="previewNotification(\'' + r.key + '\')">' + r.label + "</button>").join("") +
+          '<button class="chip" onclick="previewClass()">Class alarm</button></div>' +
+        '<button class="btn block" onclick="closeSheet(); render()">Done</button>' +
+      "</div>" +
+    "</div>";
+}
+function closeSheet() {
+  document.getElementById("sheet-root").innerHTML = "";
+}
+function setTime(key, value) {
+  if (!value) return;
+  notifications[key].time = value;
+  save("notifications", notifications);
+  toast("Time saved", NOTIFICATION_ROWS.find(r => r.key === key).label + " now comes at " + timeLabel(value) + ".");
+}
+function setOn(key, on) {
+  if (key === "class") notifications.classOn = on;
+  else notifications[key].on = on;
+  save("notifications", notifications);
+}
+function setDnd(on) {
+  notifications.dnd = on;
+  save("notifications", notifications);
+}
+function setClassMinutes(value) {
+  notifications.classMinutes = Number(value);
+  save("notifications", notifications);
+  toast("Class alarms", "Alarms now ring " + value + " minutes before each class.");
+}
+function previewNotification(key) {
+  const r = NOTIFICATION_ROWS.find(x => x.key === key);
+  const n = notifications[key];
+  if (notifications.dnd || !n.on) { toast(r.label + " is off", "Turn it on (and Do Not Disturb off) to get this notification."); return; }
+  toast(r.label + " · " + timeLabel(n.time), r.text);
+}
+function previewClass() {
+  const c = classes[0];
+  if (!c) { toast("No classes", "Add a class in the Timetable first."); return; }
+  toast(c.name + " in " + notifications.classMinutes + " minutes", "At " + c.time + " · " + c.room + (c.note ? " · Note: " + c.note : ""));
+}
+
+// ----- toast (pop-up message inside the phone) -----
+let toastTimer = null;
+function toast(title, text) {
+  document.getElementById("toast-root").innerHTML =
+    '<div class="toast" role="status"><span class="mascot" style="--size:34px" aria-hidden="true"></span><div class="grow"><b>' + esc(title) + '</b><p class="small">' + esc(text) + "</p></div></div>";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { document.getElementById("toast-root").innerHTML = ""; }, 3500);
+}
+
+// ----- start -----
+function showClock() {
+  const now = new Date();
+  document.getElementById("clock").textContent = now.getHours() + ":" + String(now.getMinutes()).padStart(2, "0");
+}
+showClock();
+setInterval(showClock, 30000);
+
+if (mode !== "system") document.documentElement.setAttribute("data-theme", mode);
+document.getElementById("btn-matcha").classList.toggle("on", !isDark());
+document.getElementById("btn-lavender").classList.toggle("on", isDark());
+
+// open a screen from the link, e.g. index.html#timetable
+const start = location.hash.slice(1);
+if (NAV_ITEMS.some(item => item[0] === start) && start !== "notifications") screen = start;
+render();
+</script>
+
+</body>
+</html>
