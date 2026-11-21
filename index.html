@@ -30,7 +30,14 @@
     --muted: #8D958B;
     --on-primary: #FBF9F6;
     --bezel: #2A3229;
-    --glow: rgba(229, 169, 158, 0.20);
+    /* soft blush and matcha glows behind the page and inside the phone */
+    --page-art: radial-gradient(760px 520px at 10% -6%, rgba(249, 209, 217, 0.80), transparent 60%),
+                radial-gradient(700px 520px at 94% 4%, rgba(199, 210, 166, 0.58), transparent 62%),
+                radial-gradient(680px 600px at 80% 104%, rgba(249, 209, 217, 0.55), transparent 60%),
+                radial-gradient(620px 520px at 2% 96%, rgba(199, 210, 166, 0.45), transparent 60%);
+    --screen-art: radial-gradient(130% 50% at 8% 0%, rgba(249, 209, 217, 0.70), transparent 62%),
+                  radial-gradient(120% 45% at 100% 32%, rgba(206, 220, 168, 0.42), transparent 62%),
+                  radial-gradient(130% 50% at 100% 100%, rgba(249, 209, 217, 0.45), transparent 62%);
     /* mascot is green by day, pink at night */
     --mascot-day: url("assets/images/mascot-day.webp");
     --mascot-night: url("assets/images/mascot-night.webp");
@@ -42,19 +49,23 @@
     :root:not([data-theme="light"]) {
       --page: #070D1A; --bg: #0B1325; --card: #182238; --line: #26314C; --primary: #C3B5E3; --rose: #E5A99E;
       --rose-ink: #F0BDB3; --ink: #EAEFF8; --ink2: #B4BDD2; --muted: #4E5978; --on-primary: #0B1325;
-      --bezel: #182238; --glow: rgba(195, 181, 227, 0.16); --mascot: var(--mascot-night); color-scheme: dark;
+      --bezel: #182238; --mascot: var(--mascot-night); color-scheme: dark;
+      --page-art: radial-gradient(820px 560px at 10% -8%, rgba(155, 135, 196, 0.30), transparent 62%), radial-gradient(760px 560px at 94% 2%, rgba(199, 182, 232, 0.16), transparent 62%), radial-gradient(700px 640px at 72% 104%, rgba(120, 98, 160, 0.24), transparent 62%); --screen-art: radial-gradient(110% 42% at 12% 0%, rgba(150, 120, 210, 0.30), transparent 66%), radial-gradient(100% 40% at 96% 96%, rgba(112, 98, 206, 0.24), transparent 68%);
     }
   }
   :root[data-theme="dark"] {
     --page: #070D1A; --bg: #0B1325; --card: #182238; --line: #26314C; --primary: #C3B5E3; --rose: #E5A99E;
     --rose-ink: #F0BDB3; --ink: #EAEFF8; --ink2: #B4BDD2; --muted: #4E5978; --on-primary: #0B1325;
-    --bezel: #182238; --glow: rgba(195, 181, 227, 0.16); --mascot: var(--mascot-night); color-scheme: dark;
+    --bezel: #182238; --mascot: var(--mascot-night); color-scheme: dark;
+      --page-art: radial-gradient(820px 560px at 10% -8%, rgba(155, 135, 196, 0.30), transparent 62%), radial-gradient(760px 560px at 94% 2%, rgba(199, 182, 232, 0.16), transparent 62%), radial-gradient(700px 640px at 72% 104%, rgba(120, 98, 160, 0.24), transparent 62%); --screen-art: radial-gradient(110% 42% at 12% 0%, rgba(150, 120, 210, 0.30), transparent 66%), radial-gradient(100% 40% at 96% 96%, rgba(112, 98, 206, 0.24), transparent 68%);
   }
 
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: var(--page);
+    background: var(--page-art), var(--page);
+    background-attachment: fixed;
+    min-height: 100vh;
     color: var(--ink);
     font-family: var(--sans);
     font-size: 15px;
@@ -68,7 +79,7 @@
   p { margin: 0; }
 
   /* page layout: top bar, navigator and phone frame */
-  .wrap { max-width: 1100px; margin: 0 auto; padding-block: 24px 40px; }
+  .wrap { max-width: 980px; margin: 0 auto; padding-block: 24px 40px; }
   .topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
   .brand { font-family: var(--serif); font-size: 26px; font-weight: 600; background: transparent; color: var(--ink); border: 0; cursor: pointer; padding: 0; }
   .brand i { color: var(--primary); font-style: italic; }
@@ -80,25 +91,26 @@
   .layout > * { min-width: 0; }
   .side { position: sticky; top: 20px; background: var(--bg); border: 1px solid var(--line); border-radius: 22px; padding: 20px 16px; }
   .side h3 { font-style: italic; }
-  .side .hint { font-size: 12px; color: var(--muted); margin: 2px 0 14px; }
+  .side .hint { font-size: 12px; color: var(--ink2); margin: 2px 0 14px; }
   .devnav { display: grid; gap: 2px; }
   .devnav button { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; color: var(--ink2); font: inherit; font-size: 14px; text-align: left; padding: 8px 10px; border-radius: 12px; cursor: pointer; }
   .devnav button svg { width: 17px; height: 17px; flex-shrink: 0; }
   .devnav button:hover { background: var(--card); color: var(--ink); }
   .devnav button.on { background: var(--card); color: var(--primary); font-weight: 700; }
   .side hr { border: 0; border-top: 1px solid var(--line); margin: 14px 0; }
-  .side .note { font-size: 12px; color: var(--muted); }
+  .side .note { font-size: 12px; color: var(--ink2); }
 
   .preview { display: flex; justify-content: center; }
   .phone { width: 392px; max-width: 100%; height: 812px; border: 10px solid var(--bezel); border-radius: 46px; background: var(--bg); position: relative; overflow: hidden; display: flex; flex-direction: column; }
   .notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 24px; background: var(--bezel); border-radius: 0 0 16px 16px; z-index: 6; }
   .statusbar { display: flex; justify-content: space-between; padding: 10px 24px 4px; font-size: 12px; font-weight: 700; color: var(--ink); }
   .screen { flex: 1; overflow-y: auto; padding: 8px 18px 24px; display: flex; flex-direction: column; gap: 16px;
-    background-image: radial-gradient(30rem 18rem at 50% -5%, var(--glow), transparent 70%); }
+    background-image: var(--screen-art); }
   .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); background: var(--card); border-top: 1px solid var(--line); padding-bottom: 6px; }
   .tabbar button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 11px; padding: 8px 0 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
   .tabbar button.on { color: var(--primary); font-weight: 700; }
   .tabbar svg { width: 20px; height: 20px; }
+  .tabbar[hidden] { display: none; }
 
   /* app screens */
   .sub { color: var(--ink2); font-size: 14px; }
@@ -145,8 +157,6 @@
   .tile.highlight .circle { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
   .tile svg { width: 19px; height: 19px; }
 
-  .class-row { display: flex; gap: 12px; padding: 8px 0; align-items: flex-start; }
-  .class-row .time { font-family: var(--serif); font-size: 19px; width: 58px; flex-shrink: 0; }
   .note { color: var(--rose-ink); font-size: 13px; }
   .task { display: flex; gap: 12px; align-items: center; padding: 8px 0; cursor: pointer; }
   .task input { width: 20px; height: 20px; accent-color: var(--primary); flex-shrink: 0; }
@@ -176,9 +186,6 @@
   .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 4px; }
 
 
-  .kv { display: grid; grid-template-columns: 1fr auto; gap: 8px; font-size: 14px; }
-  .kv span:nth-child(even) { font-weight: 700; text-align: right; }
-  .hero-num { font-family: var(--serif); font-size: 64px; line-height: 1; }
 
   .group { background: var(--card); border-radius: 18px; overflow: hidden; }
   .setting { display: flex; align-items: center; gap: 10px; padding: 12px 14px; width: 100%; border: 0; background: transparent; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
@@ -206,8 +213,6 @@
   .toast { position: absolute; left: 10px; right: 10px; top: 34px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px 12px; z-index: 9; display: flex; gap: 10px; }
   .toast .icon { width: 32px; height: 32px; border-radius: 10px; background: var(--primary); color: var(--on-primary); display: grid; place-items: center; font-family: var(--serif); font-weight: 600; flex-shrink: 0; }
 
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .form-grid .full { grid-column: 1 / -1; }
 
   .mascot { display: inline-block; width: var(--size, 64px); height: var(--size, 64px); background: var(--mascot) center / contain no-repeat; flex-shrink: 0; }
   .mascot.bob { animation: bob 3s ease-in-out infinite; }
@@ -326,17 +331,6 @@ let tasks = [
   { name: "Dissertation draft - methods", due: 9, hard: true, done: false },
 ];
 
-// weekday: 0 = Sunday ... 6 = Saturday
-let classes = load("classes", [
-  { name: "Machine Learning", weekday: 1, time: "09:00", room: "Room 2.14", note: "Bring laptop" },
-  { name: "Software Engineering", weekday: 1, time: "13:00", room: "Lab B", note: "" },
-  { name: "Databases", weekday: 2, time: "10:00", room: "Room 1.05", note: "Take the assignment" },
-  { name: "Final Year Project", weekday: 3, time: "11:00", room: "Supervisor office", note: "" },
-  { name: "Computer Networks", weekday: 4, time: "09:30", room: "Room 3.02", note: "" },
-  { name: "Machine Learning lab", weekday: 4, time: "14:00", room: "Lab A", note: "" },
-  { name: "Ethics in Computing", weekday: 5, time: "12:00", room: "Lecture hall 1", note: "" },
-]);
-
 // each notification has its own time
 let notifications = load("notifications", {
   dnd: false,
@@ -345,8 +339,6 @@ let notifications = load("notifications", {
   task: { on: true, time: "15:30" },
   period: { on: true, time: "09:00" },
   weekly: { on: true, time: "18:00" },
-  classMinutes: 20,
-  classOn: true,
 });
 
 let resolved = [];  // reminders done today
@@ -440,7 +432,6 @@ const ICON = {
   tasks: '<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M7.5 12l2.7 2.7L16.5 8.5"/>',
   calm: '<path d="M20 13.5A8.5 8.5 0 1 1 10.5 4a7 7 0 0 0 9.5 9.5Z"/>',
   profile: '<circle cx="12" cy="8.3" r="3.6"/><path d="M4.8 20c1-3.6 4-5.6 7.2-5.6s6.2 2 7.2 5.6"/>',
-  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v4.8l3.2 2"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   bell: '<path d="M6 10a6 6 0 1 1 12 0v4.2l1.6 2.6H4.4L6 14.2Z"/><path d="M10 19a2 2 0 0 0 4 0"/>',
   spark: '<path d="M12 3l1.3 3.7L17 8l-3.7 1.3L12 13l-1.3-3.7L7 8l3.7-1.3L12 3Z"/><path d="M18.5 14l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2Z"/>',
@@ -449,7 +440,6 @@ const ICON = {
   heart: '<path d="M12 20s-7.5-4.6-9.4-9.3C1.4 7.2 3.6 4 7 4c2 0 3.7 1.1 5 3 1.3-1.9 3-3 5-3 3.4 0 5.6 3.2 4.4 6.7C19.5 15.4 12 20 12 20Z"/>',
   drop: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/>',
   login: '<path d="M10 17l5-5-5-5M4 12h11"/><path d="M20 4v16"/>',
-  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
 };
 function icon(name) {
   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICON[name] + "</svg>";
@@ -464,12 +454,10 @@ const NAV_ITEMS = [
   ["logPeriod", "drop", "Log Period"],
   ["tasks", "tasks", "Tasks"],
   ["addTask", "plus", "Add Task"],
-  ["timetable", "clock", "Timetable"],
   ["calm", "calm", "Calm Space"],
   ["ai", "spark", "AI Assistant"],
   ["reminders", "bell", "Reminders"],
   ["notifications", "bell", "Notification Settings"],
-  ["insights", "chart", "Insights"],
   ["profile", "profile", "Profile"],
 ];
 const TABS = [
@@ -480,12 +468,11 @@ const TABS = [
   ["profile", "profile", "Profile"],
 ];
 // which bottom tab stays highlighted for inner screens
-const TAB_FOR = { logPeriod: "dashboard", addTask: "tasks", timetable: "tasks", ai: "dashboard", reminders: "dashboard", insights: "profile" };
+const TAB_FOR = { logPeriod: "dashboard", addTask: "tasks", ai: "dashboard", reminders: "dashboard" };
 
 let screen = "dashboard";
 let selectedDate = new Date(TODAY);
 let calendarMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
-let timetableDay = TODAY.getDay();
 
 function go(name) {
   closeSheet();
@@ -498,8 +485,8 @@ function go(name) {
 function render() {
   const screens = {
     signin: signInScreen, dashboard: dashboardScreen, calendar: calendarScreen, logPeriod: logPeriodScreen,
-    tasks: tasksScreen, addTask: addTaskScreen, timetable: timetableScreen, calm: calmScreen,
-    ai: aiScreen, reminders: remindersScreen, insights: insightsScreen, profile: profileScreen,
+    tasks: tasksScreen, addTask: addTaskScreen, calm: calmScreen,
+    ai: aiScreen, reminders: remindersScreen, profile: profileScreen,
   };
   document.getElementById("screen").innerHTML = screens[screen]();
   renderTabs();
@@ -578,7 +565,6 @@ function cycleRing(p, info) {
 function dashboardScreen() {
   const p = predict();
   const info = dayInfo(TODAY);
-  const todaysClasses = classes.filter(c => c.weekday === TODAY.getDay()).sort((a, b) => a.time.localeCompare(b.time));
   const todaysTasks = tasks.filter(t => t.due === 0);
 
   // 7-day study forecast
@@ -610,14 +596,6 @@ function dashboardScreen() {
       '<p class="small">' + (info.energy === 3 ? "High energy today. A good day for your hardest task." : info.energy === 1 ? "A lower-energy day. Keep tasks light and rest well." : "A steady day. Take a 10-minute break after each hour.") + "</p>" +
     "</section>" +
 
-    '<section class="card">' +
-      '<div class="row between"><span class="label">Today\'s classes</span>' +
-      '<button class="btn ghost small" onclick="go(\'timetable\')">Open timetable</button></div>' +
-      (todaysClasses.length === 0
-        ? '<p class="small">No classes today. Add your weekly classes once and get an alarm before each one.</p>'
-        : todaysClasses.map((c, i) => (i ? "<hr>" : "") + classRow(c)).join("")) +
-    "</section>" +
-
     '<section class="card"><div class="row between"><h3>Today\'s tasks</h3><button class="btn ghost small" onclick="go(\'addTask\')">+ Add</button></div>' +
       (todaysTasks.map(taskRow).join("") || '<p class="small">Nothing due today.</p>') +
     "</section>";
@@ -636,21 +614,6 @@ function checkInCard() {
 function doCheckIn(mood) {
   checkIn = mood;
   render();
-}
-
-function classRow(c) {
-  return '<div class="class-row"><span class="time num">' + c.time + '</span><div class="grow">' +
-    "<div><b>" + esc(c.name) + "</b></div>" +
-    '<div class="small">' + esc(c.room) + " · alarm at " + alarmTime(c.time) + "</div>" +
-    (c.note ? '<div class="note">Note: ' + esc(c.note) + "</div>" : "") +
-  "</div></div>";
-}
-
-// "10:00" -> "09:40" when the class alarm is 20 minutes before
-function alarmTime(time) {
-  const [h, m] = time.split(":").map(Number);
-  const total = (h * 60 + m - notifications.classMinutes + 1440) % 1440;
-  return String(Math.floor(total / 60)).padStart(2, "0") + ":" + String(total % 60).padStart(2, "0");
 }
 
 function taskRow(t) {
@@ -803,81 +766,6 @@ function addTask(e) {
   toast("Task added", hard && low ? "It is due on a low-energy day, so Lumenstru will plan it on a better day for you." : name + " is on your list.");
 }
 
-// ----- Timetable -----
-const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-function timetableScreen() {
-  const order = [1, 2, 3, 4, 5, 6, 0]; // Monday first
-  const chips = order.map(d => {
-    const count = classes.filter(c => c.weekday === d).length;
-    return '<button class="chip ' + (d === timetableDay ? "on" : "") + '" onclick="pickDay(' + d + ')">' + DAY_NAMES[d] + (count ? " · " + count : "") + "</button>";
-  }).join("");
-  const list = classes.filter(c => c.weekday === timetableDay).sort((a, b) => a.time.localeCompare(b.time));
-
-  return header("Timetable", "Add classes once, they repeat every week", "dashboard") +
-    '<div class="chips">' + chips + "</div>" +
-    '<section class="card">' +
-      (list.length === 0 ? '<p class="small">No classes on this day.</p>'
-        : list.map((c, i) => (i ? "<hr>" : "") + '<div class="row"><div class="grow">' + classRow(c) + "</div>" +
-            '<button class="link" onclick="removeClass(' + classes.indexOf(c) + ')">Remove</button></div>').join("")) +
-    "</section>" +
-    '<section class="card"><h3>Add a class</h3>' +
-      '<form class="form-grid" onsubmit="addClass(event)">' +
-        '<input class="full" id="c-name" placeholder="Class name, e.g. Databases" aria-label="Class name" required>' +
-        '<div class="full"><span class="label">Days (tap all that apply)</span><div class="chips" style="margin-top:6px">' +
-          order.map(d => '<button type="button" class="chip ' + (newClassDays.includes(d) ? "on" : "") + '" onclick="toggleNewClassDay(' + d + ')">' + DAY_NAMES[d] + "</button>").join("") +
-        "</div></div>" +
-        '<input class="full" id="c-time" type="time" value="09:00" aria-label="Time" required>' +
-        '<input class="full" id="c-room" placeholder="Room (optional)" aria-label="Room">' +
-        '<input class="full" id="c-note" placeholder="Note for the alarm, e.g. Take the assignment" aria-label="Note">' +
-        '<button class="btn full" type="submit">Add class</button>' +
-      "</form>" +
-      '<p class="small">An alarm rings ' + notifications.classMinutes + ' minutes before each class. <button class="link" onclick="openNotifications()">Change</button></p>' +
-    "</section>";
-}
-function pickDay(d) {
-  timetableDay = d;
-  newClassDays = [d];
-  render();
-}
-
-// days picked in the Add a class form (a class can be on more than one day)
-let newClassDays = [TODAY.getDay()];
-function toggleNewClassDay(d) {
-  // render() redraws the form, so keep what was typed
-  const ids = ["c-name", "c-room", "c-note", "c-time"];
-  const typed = ids.map(id => document.getElementById(id).value);
-  const i = newClassDays.indexOf(d);
-  if (i >= 0) newClassDays.splice(i, 1); else newClassDays.push(d);
-  render();
-  ids.forEach((id, n) => { document.getElementById(id).value = typed[n]; });
-}
-function addClass(e) {
-  e.preventDefault();
-  const name = document.getElementById("c-name").value.trim();
-  if (!name) return;
-  if (newClassDays.length === 0) { toast("Pick a day", "Tap at least one day for this class."); return; }
-  const time = document.getElementById("c-time").value;
-  const room = document.getElementById("c-room").value.trim() || "No room set";
-  const note = document.getElementById("c-note").value.trim();
-
-  const picked = [1, 2, 3, 4, 5, 6, 0].filter(d => newClassDays.includes(d));
-  for (const d of picked) {
-    classes.push({ name, weekday: d, time, room, note });
-  }
-  save("classes", classes);
-  timetableDay = picked[0];
-  render();
-  toast("Class added", name + " on " + picked.map(d => DAY_NAMES[d]).join(", ") + " at " + time + ". Alarm at " + alarmTime(time) + ".");
-}
-function removeClass(i) {
-  const name = classes[i].name;
-  classes.splice(i, 1);
-  save("classes", classes);
-  render();
-  toast("Class removed", name + " was removed from your timetable.");
-}
-
 // ----- Calm Space -----
 let breathTimer = null;
 function calmScreen() {
@@ -971,36 +859,6 @@ function resolveReminder(key) {
   toast("Done", "Nice. See you at the next reminder.");
 }
 
-// ----- Insights -----
-function insightsScreen() {
-  const p = predict();
-  const lengths = p.lengths.slice(-6);
-  const maxLen = Math.max(...lengths, p.cycleLength) + 3;
-
-  // past cycles + the predicted one as a dashed bar
-  let bars = lengths.map((l, i) => '<div class="bar"><span class="num">' + l + '</span><span class="fill" style="height:' + (l / maxLen * 80) + 'px"></span>C' + (i + 1) + "</div>").join("");
-  bars += '<div class="bar"><span class="num">' + p.cycleLength + '</span><span class="fill" style="height:' + (p.cycleLength / maxLen * 80) + 'px;background:transparent;border:1.5px dashed var(--primary)"></span>Next</div>';
-
-  const spread = Math.max(...lengths) - Math.min(...lengths);
-  const learned = '<section class="card"><div class="row"><span class="mascot" style="--size:56px" aria-hidden="true"></span>' +
-    '<h3 class="grow">What Lumenstru has learned</h3></div>' +
-    '<p class="small">' + (spread <= 3 ? "Your cycle is quite regular: it changes by " + spread + " days at most." : "Your cycle changes by up to " + spread + " days, so dates are given as a range.") + "</p>" +
-    '<p class="small">Your next period will most likely start between ' + shortDate(addDays(p.nextStart, -p.range)) + " and " + shortDate(addDays(p.nextStart, p.range)) + ".</p>" +
-    '<p class="small">You usually feel best in your Follicular and Ovulatory days, so hard tasks are planned for then.</p>' +
-    "</section>";
-
-  return header("Insights", "What Lumenstru has learned about you", "profile") +
-    '<div class="row" style="align-items:flex-start;gap:18px">' +
-      '<div><span class="label">Cycle day</span><div class="hero-num num">' + p.cycleDay + '</div><span class="note" style="font-family:var(--serif);font-style:italic">' + dayInfo(TODAY).phase + " phase</span></div>" +
-      '<div class="kv grow"><span>' + "Your cycle" + '</span><span class="num">' + p.cycleLength + " days</span>" +
-        '<span>Period</span><span class="num">' + PERIOD_LENGTH + " days</span>" +
-        '<span>Next period</span><span class="num">' + shortDate(p.nextStart) + "</span>" +
-        '<span>Periods logged</span><span class="num">' + periodStarts.length + "</span></div>" +
-    "</div>" +
-    '<section class="card"><h3>Cycle length</h3><p class="small">Days from one period to the next. The dashed bar is the prediction.</p><div class="bars">' + bars + "</div></section>" +
-    learned;
-}
-
 // ----- Profile -----
 function profileScreen() {
   const p = predict();
@@ -1009,8 +867,7 @@ function profileScreen() {
   return header("Profile", "Make Lumenstru feel like yours") +
     '<div class="row"><span class="mascot" style="--size:72px" aria-hidden="true"></span><div><h2>' + USER_NAME + '</h2><p class="small">Saved on this phone · example profile</p></div></div>' +
     '<div class="group">' +
-      row("heart", "My Cycle &amp; Insights", "go('insights')", p.cycleLength + "-day cycle") +
-      row("clock", "Class Timetable", "go('timetable')", classes.length + " classes") +
+      row("heart", "My Cycle", "go('calendar')", p.cycleLength + "-day cycle") +
       row("tasks", "Reminders", "go('reminders')") +
       row("bell", "Notification Settings", "openNotifications()") +
     "</div>" +
@@ -1053,7 +910,6 @@ function openNotifications() {
       '<input type="checkbox" class="switch" ' + (n[r.key].on ? "checked" : "") + ' onchange="setOn(\'' + r.key + '\', this.checked)" aria-label="' + r.label + ' on or off">' +
     "</div>"
   ).join("");
-  const minuteOptions = [5, 10, 15, 20, 30, 45, 60].map(m => '<option value="' + m + '"' + (m === n.classMinutes ? " selected" : "") + ">" + m + " min before</option>").join("");
 
   document.getElementById("sheet-root").innerHTML =
     '<div class="overlay" onclick="if (event.target === this) closeSheet()">' +
@@ -1063,14 +919,10 @@ function openNotifications() {
           '<input type="checkbox" class="switch" id="s-dnd" ' + (n.dnd ? "checked" : "") + ' onchange="setDnd(this.checked)"></div></div>' +
         '<p class="small">Tap a time to change it.</p>' +
         '<div class="group">' + rows +
-          '<div class="setting"><label class="grow" for="t-class">Class alarms</label>' +
-            '<select id="t-class" onchange="setClassMinutes(this.value)">' + minuteOptions + "</select>" +
-            '<input type="checkbox" class="switch" ' + (n.classOn ? "checked" : "") + ' onchange="setOn(\'class\', this.checked)" aria-label="Class alarms on or off">' +
-          "</div>" +
         "</div>" +
         '<span class="label">Preview a notification</span>' +
         '<div class="chips">' + NOTIFICATION_ROWS.map(r => '<button class="chip" onclick="previewNotification(\'' + r.key + '\')">' + r.label + "</button>").join("") +
-          '<button class="chip" onclick="previewClass()">Class alarm</button></div>' +
+          "</div>" +
         '<button class="btn block" onclick="closeSheet(); render()">Done</button>' +
       "</div>" +
     "</div>";
@@ -1085,18 +937,12 @@ function setTime(key, value) {
   toast("Time saved", NOTIFICATION_ROWS.find(r => r.key === key).label + " now comes at " + timeLabel(value) + ".");
 }
 function setOn(key, on) {
-  if (key === "class") notifications.classOn = on;
-  else notifications[key].on = on;
+  notifications[key].on = on;
   save("notifications", notifications);
 }
 function setDnd(on) {
   notifications.dnd = on;
   save("notifications", notifications);
-}
-function setClassMinutes(value) {
-  notifications.classMinutes = Number(value);
-  save("notifications", notifications);
-  toast("Class alarms", "Alarms now ring " + value + " minutes before each class.");
 }
 function previewNotification(key) {
   const r = NOTIFICATION_ROWS.find(x => x.key === key);
@@ -1104,12 +950,6 @@ function previewNotification(key) {
   if (notifications.dnd || !n.on) { toast(r.label + " is off", "Turn it on (and Do Not Disturb off) to get this notification."); return; }
   toast(r.label + " · " + timeLabel(n.time), r.text);
 }
-function previewClass() {
-  const c = classes[0];
-  if (!c) { toast("No classes", "Add a class in the Timetable first."); return; }
-  toast(c.name + " in " + notifications.classMinutes + " minutes", "At " + c.time + " · " + c.room + (c.note ? " · Note: " + c.note : ""));
-}
-
 // ----- toast (pop-up message inside the phone) -----
 let toastTimer = null;
 function toast(title, text) {
@@ -1131,7 +971,7 @@ if (mode !== "system") document.documentElement.setAttribute("data-theme", mode)
 document.getElementById("btn-matcha").classList.toggle("on", !isDark());
 document.getElementById("btn-lavender").classList.toggle("on", isDark());
 
-// open a screen from the link, e.g. index.html#timetable
+// open a screen from the link, e.g. index.html#calendar
 const start = location.hash.slice(1);
 if (NAV_ITEMS.some(item => item[0] === start) && start !== "notifications") screen = start;
 render();
